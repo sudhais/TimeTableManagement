@@ -21,4 +21,9 @@ public class CourseController {
     public void insertCourse(@RequestBody Course course){
         courseService.insertCourse(course);
     }
+
+    @DeleteMapping(path = "{courseId}")
+    public void deleteCouerse(@PathVariable("courseId") String courseId){
+        courseService.deleteCourse(courseId);
+    }
 }

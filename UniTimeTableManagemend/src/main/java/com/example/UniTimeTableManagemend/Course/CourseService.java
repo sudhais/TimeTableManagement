@@ -27,4 +27,13 @@ public class CourseService {
                     System.out.println("inserted " + course);
                 });
     }
+
+    public void deleteCourse(String courseId) {
+
+        if(!courseRepository.existsById(courseId))
+            throw new IllegalStateException("course id does not exists");
+
+        courseRepository.deleteById(courseId);
+        System.out.println("Deleted " + courseId);
+    }
 }
