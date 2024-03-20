@@ -15,12 +15,12 @@ public class UniTimeTableManagemendApplication {
 		SpringApplication.run(UniTimeTableManagemendApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner runner(CourseRepository courseRepository){
-		return args -> {
-			Course course = new Course("SE3010","AF","what to do", 4);
-			courseRepository.insert(course);
-		};
-	}
+//	@Bean
+//	CommandLineRunner runner(CourseRepository courseRepository){
+//		return args -> {
+//			Course course = new Course("SE3010","AF","what to do", 4);
+//			courseRepository.insert(course);
+//		};
+//	}
 
 }
