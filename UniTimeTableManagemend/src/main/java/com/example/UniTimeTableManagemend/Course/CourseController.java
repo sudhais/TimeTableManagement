@@ -26,4 +26,9 @@ public class CourseController {
     public void deleteCouerse(@PathVariable("courseId") String courseId){
         courseService.deleteCourse(courseId);
     }
+
+    @PutMapping(path = "{courseId}")
+    public void updateCourse(@PathVariable("courseId") String courseId, @RequestBody Course course){
+        courseService.updateCourse(courseId, course);
+    }
 }
