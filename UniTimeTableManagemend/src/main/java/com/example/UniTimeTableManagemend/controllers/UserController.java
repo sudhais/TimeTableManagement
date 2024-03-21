@@ -38,4 +38,19 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
+
+    @PostMapping(path = "{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable("userId") String userid, @RequestBody User user){
+
+        try {
+            userService.updateUser(userid, user);
+            return new ResponseEntity<>("successfully inserted " + user, HttpStatus.OK);
+        }catch (ConstraintViolationException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
+        }catch (UserException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+        }catch (CourseException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+        }
+    }
 }
