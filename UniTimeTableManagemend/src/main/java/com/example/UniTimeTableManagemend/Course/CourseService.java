@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @AllArgsConstructor
@@ -15,29 +16,46 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
-    public void insertCourse(Course course) {
+    public Course insertCourse(Course course) {
 
-        courseRepository.findCourseByCode(course.getCode())
-                .ifPresentOrElse(course1 -> {
+//         courseRepository.findCourseByCode(course.getCode())
+//                .ifPresentOrElse(course1 -> {
+//                    System.out.println("Already course code " + course1.getCode() + " exist" );
+//                    throw new IllegalStateException("Already course code " + course1.getCode() + " exist");
+//
+//                },() -> {
+//                    courseRepository.insert(course);
+//                    System.out.println("inserted " + course);
+//                });
+
+       return courseRepository.findCourseByCode(course.getCode())
+                .map(course1 -> {
                     System.out.println("Already course code " + course1.getCode() + " exist" );
-                    throw new IllegalStateException("Already course code " + course1.getCode() + " exist");
-
-                },() -> {
+                    return course1;
+                })
+                .orElseGet(() -> {
                     courseRepository.insert(course);
                     System.out.println("inserted " + course);
+                    return null;
                 });
     }
 
-    public void deleteCourse(String courseId) {
+    public Boolean deleteCourse(String courseId) {
 
-        if(!courseRepository.existsById(courseId))
-            throw new IllegalStateException("course id does not exists");
+//        if(!courseRepository.existsById(courseId))
+//            throw new IllegalStateException("course id does not exists");
+        if(courseRepository.existsById(courseId)){
+            courseRepository.deleteById(courseId);
+            System.out.println("Deleted " + courseId);
+            return true;
+        }
+        return false;
 
-        courseRepository.deleteById(courseId);
-        System.out.println("Deleted " + courseId);
     }
 
-    public void updateCourse(String courseId, Course course1) {
+    public Boolean updateCourse(String courseId, Course course1) {
+
+        Boolean updated = false;
 
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalStateException("course id does not exists"));
@@ -80,6 +98,7 @@ public class CourseService {
 
         courseRepository.save(course);
         System.out.println("Updated " + course);
-
+        updated = true;
+        return updated;
     }
 }
