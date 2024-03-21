@@ -1,0 +1,7 @@
+com\example\UniTimeTableManagemend\Course\CourseService.class
+com\example\UniTimeTableManagemend\Course\Course.class
+com\example\UniTimeTableManagemend\UniTimeTableManagemendApplication.class
+com\example\UniTimeTableManagemend\exception\CourseException.class
+com\example\UniTimeTableManagemend\Course\CourseController.class
+com\example\UniTimeTableManagemend\Course\CourseRepository.class
+com\example\UniTimeTableManagemend\mongodb\cofig\ValidationConfig.class
