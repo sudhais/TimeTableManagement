@@ -1,5 +1,6 @@
-package com.example.UniTimeTableManagemend.Course;
+package com.example.UniTimeTableManagemend.respositories;
 
+import com.example.UniTimeTableManagemend.models.Course;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;

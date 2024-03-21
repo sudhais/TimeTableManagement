@@ -1,5 +1,7 @@
-package com.example.UniTimeTableManagemend.Course;
+package com.example.UniTimeTableManagemend.controllers;
 
+import com.example.UniTimeTableManagemend.models.Course;
+import com.example.UniTimeTableManagemend.services.CourseService;
 import com.example.UniTimeTableManagemend.exception.CourseException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;

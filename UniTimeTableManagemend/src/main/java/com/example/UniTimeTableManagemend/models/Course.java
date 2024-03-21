@@ -1,4 +1,4 @@
-package com.example.UniTimeTableManagemend.Course;
+package com.example.UniTimeTableManagemend.models;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
