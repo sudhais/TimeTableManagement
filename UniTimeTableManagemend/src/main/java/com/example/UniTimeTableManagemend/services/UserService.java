@@ -27,7 +27,7 @@ public class UserService {
             return new ArrayList<User>();
     }
 
-    public void addNewUser(User user) throws UserException, ConstraintViolationException, CourseException {
+    public void addNewUser(User user) throws ConstraintViolationException,UserException, CourseException {
         Optional<User> userOptional = userRepository.findUserByName(user.getName());
 
         if(userOptional.isPresent()){

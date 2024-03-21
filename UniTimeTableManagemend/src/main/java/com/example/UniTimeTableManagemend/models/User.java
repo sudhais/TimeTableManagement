@@ -19,10 +19,11 @@ public class User {
     @NotBlank(message = "user name cannot be blank")
     private String name;
     private List<String> courseCodes;
+
+    @NotNull(message = "user password cannot be null")
+    @NotBlank(message = "user password cannot be blank")
     private String password;
 
-    @NotNull(message = "user role cannot be null")
-    @NotBlank(message = "user role cannot be blank")
     private Role role;
 
     public User(String name, List<String> courseCodes, String password, Role role) {
