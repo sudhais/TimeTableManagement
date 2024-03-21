@@ -44,7 +44,6 @@ public class CourseService {
         }else
             throw new CourseException(CourseException.NotFoundException(courseId));
 
-
     }
 
     public void updateCourse(String courseId, Course course1) throws ConstraintViolationException, CourseException {
@@ -71,5 +70,14 @@ public class CourseService {
         courseRepository.save(course);
         System.out.println("Updated " + course);
 
+    }
+
+    public Boolean findByCourseCode(String code) throws CourseException{
+        Optional<Course> course1 = courseRepository.findCourseByCode(code);
+        if(course1.isPresent()){
+            return true;
+        }else{
+            throw new CourseException(CourseException.NotFoundException(code));
+        }
     }
 }

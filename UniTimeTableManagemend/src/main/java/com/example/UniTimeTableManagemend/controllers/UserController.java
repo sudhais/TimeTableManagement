@@ -1,5 +1,6 @@
 package com.example.UniTimeTableManagemend.controllers;
 
+import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.exception.UserException;
 import com.example.UniTimeTableManagemend.models.User;
 import com.example.UniTimeTableManagemend.services.UserService;
@@ -32,6 +33,8 @@ public class UserController {
         }catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
         }catch (UserException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+        }catch (CourseException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
