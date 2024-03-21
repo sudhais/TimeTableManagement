@@ -1,17 +1,17 @@
 package com.example.UniTimeTableManagemend.exception;
 
-public class StudentException extends Exception{
+public class UserException extends Exception{
 
-    public StudentException(String message){
+    public UserException(String message){
         super(message);
     }
 
     public static String NotFoundException(String id) {
-        return "Student id: " + id + " does not exists";
+        return "User id: " + id + " does not exists";
     }
 
     public static String AlreadyExists(String name) {
-        return "Student name: " + name + " Already exists";
+        return "User name: " + name + " Already exists";
     }
 
 }

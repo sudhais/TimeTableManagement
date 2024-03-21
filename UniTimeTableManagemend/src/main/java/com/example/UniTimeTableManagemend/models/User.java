@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @Document
-public class Student {
+public class User {
 
     @Id
     private String id;
@@ -21,4 +21,12 @@ public class Student {
     private List<String> courseCodes;
     private String password;
 
+    private Role role;
+
+    public User(String name, List<String> courseCodes, String password, Role role) {
+        this.name = name;
+        this.courseCodes = courseCodes;
+        this.password = password;
+        this.role = role;
+    }
 }
