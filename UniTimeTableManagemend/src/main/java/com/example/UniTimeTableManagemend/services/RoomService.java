@@ -48,6 +48,15 @@ public class RoomService {
 
     }
 
+    public void deleteRoom(String roomId) throws RoomException {
+        if(roomRepository.existsById(roomId)){
+            roomRepository.deleteById(roomId);
+            System.out.println("Deleted " + roomId);
+        }else
+            throw new RoomException(RoomException.NotFoundException(roomId));
+
+    }
+
     public Boolean availability(Room room) throws RoomException{
 
         //converting string to local time and initialize to the variable
@@ -116,6 +125,7 @@ public class RoomService {
         }
 
     }
+
 
 
 }

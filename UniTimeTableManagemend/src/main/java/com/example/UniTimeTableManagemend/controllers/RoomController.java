@@ -53,4 +53,14 @@ public class RoomController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
+
+    @DeleteMapping(path = "{roomId}")
+    public ResponseEntity<?> deleteRoom(@PathVariable String roomId){
+        try {
+            roomService.deleteRoom(roomId);
+            return new ResponseEntity<>("Deleted " + roomId , HttpStatus.OK);
+        }catch (RoomException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+        }
+    }
 }
