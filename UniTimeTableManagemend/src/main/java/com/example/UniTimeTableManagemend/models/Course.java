@@ -1,5 +1,6 @@
 package com.example.UniTimeTableManagemend.models;
 
+import com.example.UniTimeTableManagemend.models.enums.Faculty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class Course {
     private String description;
     private int credit;
 
-    private List<String> faculty;
+    private List<Faculty> faculty;
 
 //    public Course(String code, String name, String description, int credit) {
 //        this.code = code;
@@ -38,7 +39,7 @@ public class Course {
 //        this.faculty = new ArrayList<>();
 //    }
 
-    public Course(String code, String name, String description, int credit, List<String> faculty) {
+    public Course(String code, String name, String description, int credit, List<Faculty> faculty) {
         this.code = code;
         this.name = name;
         this.description = description;

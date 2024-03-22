@@ -1,6 +1,7 @@
 package com.example.UniTimeTableManagemend.services;
 
 import com.example.UniTimeTableManagemend.models.Course;
+import com.example.UniTimeTableManagemend.models.enums.Faculty;
 import com.example.UniTimeTableManagemend.respositories.CourseRepository;
 import com.example.UniTimeTableManagemend.exception.CourseException;
 import jakarta.validation.ConstraintViolationException;
@@ -77,9 +78,14 @@ public class CourseService {
                 .orElseThrow(() -> new CourseException(CourseException.NotFoundException(courseId)));
 
         if(!course1.getFaculty().isEmpty()){
-            course.setFaculty(course1.getFaculty());
-            courseRepository.save(course);
+//            for (Faculty faculty : course.getFaculty()) {
+//                if (faculty == null || !(faculty instanceof Faculty)) {
+//                    System.out.println(faculty + " does not the value");
+//                }
+//            }
         }
+        course.setFaculty(course1.getFaculty());
+        courseRepository.save(course);
 
     }
 

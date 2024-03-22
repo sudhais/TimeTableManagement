@@ -1,5 +1,6 @@
 package com.example.UniTimeTableManagemend.models;
 
+import com.example.UniTimeTableManagemend.models.enums.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
