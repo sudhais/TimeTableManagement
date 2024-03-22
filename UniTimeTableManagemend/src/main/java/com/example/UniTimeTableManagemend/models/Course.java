@@ -3,10 +3,12 @@ package com.example.UniTimeTableManagemend.models;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Document
@@ -26,10 +28,21 @@ public class Course {
     private String description;
     private int credit;
 
-    public Course(String code, String name, String description, int credit) {
+    private List<String> faculty;
+
+//    public Course(String code, String name, String description, int credit) {
+//        this.code = code;
+//        this.name = name;
+//        this.description = description;
+//        this.credit = credit;
+//        this.faculty = new ArrayList<>();
+//    }
+
+    public Course(String code, String name, String description, int credit, List<String> faculty) {
         this.code = code;
         this.name = name;
         this.description = description;
         this.credit = credit;
+        this.faculty = faculty;
     }
 }

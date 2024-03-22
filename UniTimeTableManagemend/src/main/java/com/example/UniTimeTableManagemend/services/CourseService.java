@@ -72,6 +72,18 @@ public class CourseService {
 
     }
 
+    public void updateCourseFaculty(String courseId, Course course1) throws CourseException,ConstraintViolationException{
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseException(CourseException.NotFoundException(courseId)));
+
+        if(!course1.getFaculty().isEmpty()){
+            course.setFaculty(course1.getFaculty());
+            courseRepository.save(course);
+        }
+
+    }
+
+
     public Boolean findByCourseCode(String code) throws CourseException{
         Optional<Course> course1 = courseRepository.findCourseByCode(code);
         if(course1.isPresent()){

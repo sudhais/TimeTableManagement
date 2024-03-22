@@ -58,4 +58,17 @@ public class CourseController {
            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
        }
     }
+
+    @PutMapping("/faculty/{courseId}")
+    public ResponseEntity<String> updateCourseFuclty(@PathVariable("courseId") String courseId, @RequestBody Course course){
+
+        try {
+            courseService.updateCourseFaculty(courseId, course);
+            return new ResponseEntity<>("successfully added the faculty" + course, HttpStatus.OK);
+        }catch (ConstraintViolationException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
+        }catch(CourseException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+        }
+    }
 }
