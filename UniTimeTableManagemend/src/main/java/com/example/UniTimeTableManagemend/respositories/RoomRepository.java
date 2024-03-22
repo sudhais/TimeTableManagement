@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface RoomRepository extends MongoRepository<Room,String> {
 
 
-    Optional<List<Room>> findRoomByDayAndLocation(Day day, Location location);
+    Optional<List<Room>> findRoomByDayAndLocationOrderByStartTime(Day day, Location location);
 }
