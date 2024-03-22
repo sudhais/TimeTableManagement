@@ -4,6 +4,7 @@ import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.exception.RoomException;
 import com.example.UniTimeTableManagemend.models.Room;
 import com.example.UniTimeTableManagemend.services.RoomService;
+import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,9 @@ public class RoomController {
         try {
             roomService.insertRoom(room);
             return new ResponseEntity<>("inserted " + room, HttpStatus.OK);
-        }catch (CourseException e){
+        }catch (ConstraintViolationException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
+        } catch (CourseException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }catch (RoomException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);

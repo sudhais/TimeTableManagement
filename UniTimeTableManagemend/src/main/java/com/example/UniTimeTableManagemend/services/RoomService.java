@@ -6,6 +6,7 @@ import com.example.UniTimeTableManagemend.models.Room;
 import com.example.UniTimeTableManagemend.models.enums.Day;
 import com.example.UniTimeTableManagemend.models.enums.Location;
 import com.example.UniTimeTableManagemend.respositories.RoomRepository;
+import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,15 +31,14 @@ public class RoomService {
             return new ArrayList<Room>();
     }
 
-    public void insertRoom(Room room) throws CourseException, RoomException {
-
-        //converting LocalTime to String
-//        room.setStartTime(room.getStartTime().formatted(DateTimeFormatter.ofPattern("HH:mm")));
-//        room.setEndTime(room.getEndTime().formatted(DateTimeFormatter.ofPattern("HH:mm")));
+    public void insertRoom(Room room) throws CourseException, RoomException, ConstraintViolationException {
+        //validate
+        roomValidate(room);
 
         //check course code exists or not
         courseService.findByCourseCode(room.getCourseCode());
 
+        //check the condition and insert
         if(availability(room)){
             roomRepository.insert(room);
             System.out.println("Inserted " + room);
@@ -50,8 +50,8 @@ public class RoomService {
 
     public Boolean availability(Room room) throws RoomException{
 
-        LocalTime startTime,endTime;
         //converting string to local time and initialize to the variable
+        LocalTime startTime,endTime;
         startTime = LocalTime.parse(room.getStartTime(),DateTimeFormatter.ofPattern("HH:mm"));
         endTime = LocalTime.parse(room.getEndTime(),DateTimeFormatter.ofPattern("HH:mm"));
 
@@ -60,8 +60,10 @@ public class RoomService {
 
         //check rooms list exists or not
        if(rooms.isPresent()){
+
            LocalTime start,end;
 
+           //iterate the rooms list
            for(Room room1 : rooms.get()){
                //converting string to local time and initialize to the variable
                start = LocalTime.parse(room1.getStartTime(),DateTimeFormatter.ofPattern("HH:mm"));
@@ -87,6 +89,31 @@ public class RoomService {
         }else
             throw new RoomException(RoomException.NoContent());
 
+
+    }
+
+    private static void roomValidate(Room room) throws RoomException {
+
+        if(room.getCourseCode() == null)
+            throw new RoomException(RoomException.BlankValues("Course Code"));
+        else{
+            if(room.getCourseCode().isBlank())
+                throw new RoomException(RoomException.NullValues("Course Code"));
+        }
+
+        if(room.getStartTime() == null)
+            throw new RoomException(RoomException.BlankValues("Start Time"));
+        else{
+            if(room.getStartTime().isBlank())
+                throw new RoomException(RoomException.NullValues("Start Time"));
+        }
+
+        if(room.getEndTime() == null)
+            throw new RoomException(RoomException.BlankValues("End Time"));
+        else{
+            if(room.getEndTime().isBlank())
+                throw new RoomException(RoomException.NullValues("End Time"));
+        }
 
     }
 

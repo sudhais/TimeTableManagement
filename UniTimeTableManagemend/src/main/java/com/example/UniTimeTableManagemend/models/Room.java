@@ -16,12 +16,12 @@ public class Room {
 
     @Id
     private String id;
-
-//    @NotNull(message = "Location cannot be null")
-//    @NotBlank(message = "Location connot bu blank")
+    @NotNull(message = "location cannot be null")
     private Location location;
     private String startTime;
     private String endTime;
+
+    @NotNull(message = "day cannot be null")
     private Day day;
     private String courseCode;
 

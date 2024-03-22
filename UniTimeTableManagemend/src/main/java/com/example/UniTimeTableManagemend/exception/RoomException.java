@@ -19,4 +19,12 @@ public class RoomException extends Exception{
     public static String NoContent(){
         return "Room is full time available";
     };
+
+    public static String NullValues(String name){
+        return name + " Cannot be blank";
+    }
+
+    public static String BlankValues(String name){
+        return name + " Cannot be null";
+    }
 }
