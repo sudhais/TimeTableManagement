@@ -3,6 +3,8 @@ package com.example.UniTimeTableManagemend.controllers;
 import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.exception.RoomException;
 import com.example.UniTimeTableManagemend.models.Room;
+import com.example.UniTimeTableManagemend.models.enums.Day;
+import com.example.UniTimeTableManagemend.models.enums.Location;
 import com.example.UniTimeTableManagemend.services.RoomService;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,18 @@ public class RoomController {
     public ResponseEntity<?> getAllRooms(){
         List<Room> rooms = roomService.getAllRooms();
         return new ResponseEntity<>(rooms, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<?> getAllRoomsByLocation(@RequestParam String day , @RequestParam String location){
+        try {
+            List<Room> rooms = roomService.locationTimes(Day.valueOf(day),Location.valueOf(location));
+            return new ResponseEntity<>(rooms, HttpStatus.OK);
+        }catch (RoomException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+        }catch (IllegalArgumentException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
     @PostMapping
