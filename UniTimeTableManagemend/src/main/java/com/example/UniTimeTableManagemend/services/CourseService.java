@@ -64,10 +64,7 @@ public class CourseService {
         }
         course.setDescription(course1.getDescription());
         course.setName(course1.getName());
-        if(course1.getCredit() < 0 || course1.getCredit() > 4){
-            throw new CourseException(CourseException.CreateLimit());
-        }else
-            course.setCredit(course1.getCredit());
+        course.setCredit(course1.getCredit());
         courseRepository.save(course);
         System.out.println("Updated " + course);
 

@@ -14,8 +14,5 @@ public class CourseException extends Exception{
         return "Course code: " + code + " Already exists";
     }
 
-    public static String CreateLimit(){
-        return "course credit should be between 0-4";
-    }
 
 }
