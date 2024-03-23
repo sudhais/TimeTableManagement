@@ -13,13 +13,11 @@ public class TimeTable {
     @Id
     private String id;
     private List<String> courseCodes;
-    private List<Course> courses;
-    private List<Room> rooms;
 
+    private List<Table> tables;
 
-    public TimeTable(List<String> courseCodes, List<Course> courses, List<Room> rooms) {
+    public TimeTable(List<String> courseCodes, List<Table> tables) {
         this.courseCodes = courseCodes;
-        this.courses = courses;
-        this.rooms = rooms;
+        this.tables = tables;
     }
 }

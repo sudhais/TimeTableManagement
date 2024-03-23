@@ -1,6 +1,7 @@
 package com.example.UniTimeTableManagemend.controllers;
 
 import com.example.UniTimeTableManagemend.exception.CourseException;
+import com.example.UniTimeTableManagemend.exception.TimeTableException;
 import com.example.UniTimeTableManagemend.models.TimeTable;
 import com.example.UniTimeTableManagemend.services.TimeTableService;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ public class TimeTableController {
         try {
             timeTableService.addTimeTable(timeTable.getCourseCodes());
             return new ResponseEntity<>("Successfully inserted", HttpStatus.CREATED);
-        }catch (CourseException e){
+        }catch (CourseException | TimeTableException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
