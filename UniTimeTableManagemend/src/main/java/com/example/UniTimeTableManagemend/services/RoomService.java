@@ -45,8 +45,6 @@ public class RoomService {
             System.out.println("Inserted " + room);
         }
 
-
-
     }
 
     public void deleteRoom(String roomId) throws RoomException {

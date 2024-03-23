@@ -33,7 +33,7 @@ public class Course {
     @DecimalMin(value = "0", message = "course credit should not be less than 0")
     private int credit;
 
-    private List<Faculty> faculty;
+    private Faculty faculty;
 
 //    public Course(String code, String name, String description, int credit) {
 //        this.code = code;
@@ -43,7 +43,7 @@ public class Course {
 //        this.faculty = new ArrayList<>();
 //    }
 
-    public Course(String code, String name, String description, int credit, List<Faculty> faculty) {
+    public Course(String code, String name, String description, int credit, Faculty faculty) {
         this.code = code;
         this.name = name;
         this.description = description;

@@ -7,6 +7,8 @@ import java.util.List;
 public class TimeTable {
 
     private List<String> courseCode;
+    private Course course;
+    private Room room;
 
 
 

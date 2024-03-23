@@ -72,6 +72,7 @@ public class CourseService {
         course.setDescription(course1.getDescription());
         course.setName(course1.getName());
         course.setCredit(course1.getCredit());
+        course.setFaculty(course1.getFaculty());
         courseRepository.save(course);
         System.out.println("Updated " + course);
 
