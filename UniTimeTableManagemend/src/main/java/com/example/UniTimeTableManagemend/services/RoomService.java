@@ -136,6 +136,11 @@ public class RoomService {
 
     }
 
+    public List<Room> findByCode(String courseCode) throws CourseException{
+        return roomRepository.findRoomByCourseCode(courseCode)
+                 .orElseThrow(()-> new CourseException(CourseException.NotFoundException("Course Code", courseCode)));
+    }
+
     //validate room properties method
     private static void roomValidate(Room room) throws RoomException {
 

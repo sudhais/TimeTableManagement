@@ -1,15 +1,25 @@
 package com.example.UniTimeTableManagemend.models;
 
-import com.example.UniTimeTableManagemend.models.enums.Faculty;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
+@Document
+@Data
 public class TimeTable {
 
-    private List<String> courseCode;
-    private Course course;
-    private Room room;
+    @Id
+    private String id;
+    private List<String> courseCodes;
+    private List<Course> courses;
+    private List<Room> rooms;
 
 
-
+    public TimeTable(List<String> courseCodes, List<Course> courses, List<Room> rooms) {
+        this.courseCodes = courseCodes;
+        this.courses = courses;
+        this.rooms = rooms;
+    }
 }

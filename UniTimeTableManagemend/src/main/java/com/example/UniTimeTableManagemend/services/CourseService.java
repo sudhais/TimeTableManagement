@@ -48,7 +48,7 @@ public class CourseService {
             courseRepository.deleteById(courseId);
             System.out.println("Deleted " + courseId);
         }else
-            throw new CourseException(CourseException.NotFoundException(courseId));
+            throw new CourseException(CourseException.NotFoundException("Course Id",courseId));
 
     }
 
@@ -56,7 +56,7 @@ public class CourseService {
 
         //get the course given by course id else throw
         Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new CourseException(CourseException.NotFoundException(courseId)));
+                .orElseThrow(() -> new CourseException(CourseException.NotFoundException("Course Id",courseId)));
 
         //check new and older course id is same
         if(!course1.getCode().equals(course.getCode())){
@@ -81,7 +81,7 @@ public class CourseService {
     public void updateCourseFaculty(String courseId, Course course1) throws CourseException,ConstraintViolationException{
         //find and get course if it is in the db by given course id or throw
         Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new CourseException(CourseException.NotFoundException(courseId)));
+                .orElseThrow(() -> new CourseException(CourseException.NotFoundException("CourseId",courseId)));
 
         course.setFaculty(course1.getFaculty());
         courseRepository.save(course);
@@ -90,12 +90,12 @@ public class CourseService {
 
 
     //check course by given course code method
-    public Boolean findByCourseCode(String code) throws CourseException{
+    public Course findByCourseCode(String code) throws CourseException{
         Optional<Course> course1 = courseRepository.findCourseByCode(code);
         if(course1.isPresent()){
-            return true;
+            return course1.get();
         }else{
-            throw new CourseException(CourseException.NotFoundException(code));
+            throw new CourseException(CourseException.NotFoundException("Course Code",code));
         }
     }
 }
