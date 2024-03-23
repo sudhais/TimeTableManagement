@@ -20,7 +20,9 @@ public class UserService {
 
     private CourseService courseService;
     public List<User> getAllUsers() {
+        //get all user in db
         List<User> users = userRepository.findAll();
+        //check users are exits or not
         if(users.size() > 0)
             return users;
         else
@@ -28,16 +30,20 @@ public class UserService {
     }
 
     public void addNewUser(User user) throws ConstraintViolationException,UserException, CourseException {
+        //get the user by given name
         Optional<User> userOptional = userRepository.findUserByName(user.getName());
 
+        //check user exists or not
         if(userOptional.isPresent()){
             System.out.println("Already user name " + user.getName() + " exist" );
             throw new UserException(UserException.AlreadyExists(user.getName()));
         }else{
             System.out.println(user.getCourseCodes());
+            //check all course code that are correct
             for(String courseCode : user.getCourseCodes()){
                 courseService.findByCourseCode(courseCode);
             }
+            //insert data into the db
             userRepository.insert(user);
             System.out.println("inserted " + user);
         }
@@ -45,9 +51,13 @@ public class UserService {
 
     public void updateUser(String userid, User user) throws UserException, ConstraintViolationException, CourseException {
 
+        //get user by given user id or else throw
         User userOptional = userRepository.findById(userid)
                 .orElseThrow(()->new UserException(UserException.NotFoundException(userid)));
+
+        //check uesr name is same or not
         if(!userOptional.getName().equals(user.getName())){
+            //get the user in db by given name
            User user1 = findUserByName(user.getName());
            if(user1 != null){
                System.out.println("already username: "+ user1.getName() + " exists");
@@ -55,7 +65,7 @@ public class UserService {
            }
            userOptional.setName(user.getName());
         }
-
+        //check all given course code is exists in db
         for(String courseCode : user.getCourseCodes()){
             courseService.findByCourseCode(courseCode);
         }
@@ -64,6 +74,7 @@ public class UserService {
         userRepository.save(userOptional);
     }
 
+    //get user from db by given name
     public User findUserByName(String name){
         Optional<User> userOptional = userRepository.findUserByName(name);
         return userOptional.orElse(null);

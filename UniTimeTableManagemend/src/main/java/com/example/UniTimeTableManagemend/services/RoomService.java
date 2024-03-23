@@ -28,7 +28,7 @@ public class RoomService {
         if(rooms.size() > 0 )
             return rooms;
         else
-            return new ArrayList<Room>();
+            return new ArrayList<>();
     }
 
     public void insertRoom(Room room) throws CourseException, RoomException, ConstraintViolationException {
@@ -40,6 +40,7 @@ public class RoomService {
 
         //check the condition and insert
         if(availability(room)){
+            //insert to mongodb
             roomRepository.insert(room);
             System.out.println("Inserted " + room);
         }
@@ -49,7 +50,9 @@ public class RoomService {
     }
 
     public void deleteRoom(String roomId) throws RoomException {
+        //check roomId in mongodb exists or not
         if(roomRepository.existsById(roomId)){
+            //delete room data in mongodb
             roomRepository.deleteById(roomId);
             System.out.println("Deleted " + roomId);
         }else
@@ -61,6 +64,7 @@ public class RoomService {
         //validate new room object
         roomValidate(room);
 
+        //check room id exists or not if not throw that there were no data with roomid
         Room room1 = roomRepository.findById(roomid)
                 .orElseThrow(()-> new RuntimeException(RoomException.NotFoundException(roomid)));
 
@@ -70,6 +74,7 @@ public class RoomService {
             courseService.findByCourseCode(room.getCourseCode());
         }
 
+        //set data from updated data
         room1.setCourseCode(room.getCourseCode());
         room1.setStartTime(room.getStartTime());
         room1.setEndTime(room.getEndTime());
@@ -78,6 +83,7 @@ public class RoomService {
 
         //check the condition and insert
         if(availability(room)){
+            //update to the mongodb
             roomRepository.save(room1);
             System.out.println("Updated " + room1);
         }

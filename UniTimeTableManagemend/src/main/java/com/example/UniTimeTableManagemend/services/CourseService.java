@@ -19,14 +19,18 @@ public class CourseService {
     private final CourseRepository courseRepository;
 
     public List<Course> getAllCourses() {
+        // get all course data from db
         List<Course> courses = courseRepository.findAll();
+        //check datas are exists
         if(courses.size() > 0)
             return courses;
         else
+            //if no data in db create an empty array list
             return new ArrayList<Course>();
     }
 
     public void insertCourse(Course course) throws CourseException, ConstraintViolationException {
+        //get the course if already exists in course code
          Optional<Course> course1 = courseRepository.findCourseByCode(course.getCode());
          if(course1.isPresent()){
              System.out.println("Already course code " + course.getCode() + " exist" );
@@ -39,6 +43,7 @@ public class CourseService {
 
     public void deleteCourse(String courseId) throws CourseException {
 
+        //check given course id exists in db
         if(courseRepository.existsById(courseId)){
             courseRepository.deleteById(courseId);
             System.out.println("Deleted " + courseId);
@@ -49,11 +54,13 @@ public class CourseService {
 
     public void updateCourse(String courseId, Course course1) throws ConstraintViolationException, CourseException {
 
+        //get the course given by course id else throw
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseException(CourseException.NotFoundException(courseId)));
 
+        //check new and older course id is same
         if(!course1.getCode().equals(course.getCode())){
-
+            //get the course if already in db with course code
             Optional<Course> courseOptional = courseRepository.findCourseByCode(course1.getCode());
             if(courseOptional.isPresent()){
                 System.out.println("Already course code " + courseOptional.get().getCode() + " exist" );
@@ -71,6 +78,7 @@ public class CourseService {
     }
 
     public void updateCourseFaculty(String courseId, Course course1) throws CourseException,ConstraintViolationException{
+        //find and get course if it is in the db by given course id or throw
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseException(CourseException.NotFoundException(courseId)));
 
@@ -80,6 +88,7 @@ public class CourseService {
     }
 
 
+    //check course by given course code method
     public Boolean findByCourseCode(String code) throws CourseException{
         Optional<Course> course1 = courseRepository.findCourseByCode(code);
         if(course1.isPresent()){

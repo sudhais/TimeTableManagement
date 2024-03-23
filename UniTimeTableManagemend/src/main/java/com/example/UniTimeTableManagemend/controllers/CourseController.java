@@ -37,7 +37,7 @@ public class CourseController {
     }
 
     @DeleteMapping(path = "{courseId}")
-    public ResponseEntity<?> deleteCouerse(@PathVariable("courseId") String courseId){
+    public ResponseEntity<?> deleteCourse(@PathVariable("courseId") String courseId){
         try {
             courseService.deleteCourse(courseId);
             return new ResponseEntity<>("Successfully deleted " + courseId, HttpStatus.OK);
