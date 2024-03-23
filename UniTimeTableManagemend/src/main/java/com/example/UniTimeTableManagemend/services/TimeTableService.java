@@ -22,14 +22,38 @@ public class TimeTableService {
     private CourseService courseService;
     private RoomService roomService;
 
+    public TimeTable getTimeTable(List<String> courseCodes) throws TimeTableException, CourseException {
+        //find and get given by course codes
+        List<TimeTable> timeTableList= timeTableRepository.findTimeTableByCourseCodesContainsAll(courseCodes);
+        //check timetable list empty or not
+        if(!timeTableList.isEmpty()){
+            //iterate the timetable list
+            for(TimeTable timeTable: timeTableList){
+                //check no of course codes are same
+                if(timeTable.getCourseCodes().size() == courseCodes.size()){
+                    return timeTable;
+                }
+            }
+        }
+        //call function to add
+        addTimeTable(courseCodes);
+        return getTimeTable(courseCodes);
+    }
+
     public void addTimeTable(List<String> courseCodes) throws CourseException, TimeTableException {
 
         //find and get given by course codes
-        Optional<TimeTable> timeTable= timeTableRepository.findTimeTableByCourseCodes(courseCodes);
+        List<TimeTable> timeTableList= timeTableRepository.findTimeTableByCourseCodesContainsAll(courseCodes);
         //check if it is already exists or not
-        if(timeTable.isPresent()){
-            System.out.println(timeTable);
-            throw new TimeTableException(TimeTableException.AlreadyExists());
+        if(!timeTableList.isEmpty()){
+            System.out.println(timeTableList);
+            //iterate timetable list
+            for(TimeTable timeTable: timeTableList){
+                //check no of course code are same
+                if(timeTable.getCourseCodes().size() == courseCodes.size()){
+                    throw new TimeTableException(TimeTableException.AlreadyExists());
+                }
+            }
         }
 
         List<Table> tables = new ArrayList<>();

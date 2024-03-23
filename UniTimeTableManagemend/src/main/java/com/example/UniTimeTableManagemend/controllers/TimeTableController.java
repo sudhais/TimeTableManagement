@@ -17,11 +17,22 @@ import java.util.List;
 public class TimeTableController {
 
     private TimeTableService timeTableService;
+
+    @GetMapping
+    public ResponseEntity<?> getTimeTable(@RequestBody List<String> courseCodes){
+        try {
+           TimeTable timeTable1 = timeTableService.getTimeTable(courseCodes);
+            return new ResponseEntity<>(timeTable1, HttpStatus.OK);
+        }catch (CourseException | TimeTableException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
     @PostMapping
-    public ResponseEntity<?> addTimeTable(@RequestBody TimeTable timeTable) {
+    public ResponseEntity<?> addTimeTable(@RequestBody List<String> courseCodes) {
 
         try {
-            timeTableService.addTimeTable(timeTable.getCourseCodes());
+            timeTableService.addTimeTable(courseCodes);
             return new ResponseEntity<>("Successfully inserted", HttpStatus.CREATED);
         }catch (CourseException | TimeTableException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
