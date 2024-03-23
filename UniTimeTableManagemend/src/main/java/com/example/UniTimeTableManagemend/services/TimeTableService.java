@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -79,5 +78,31 @@ public class TimeTableService {
 
         }
         timeTableRepository.insert(new TimeTable(courseCodes, tables));
+    }
+
+    public void updateTimeTable(String id,List<String> courseCodes) throws TimeTableException {
+
+        TimeTable timeTable = timeTableRepository.findById(id)
+                .orElseThrow(()->new TimeTableException(TimeTableException.NotFoundException(id)));
+
+        //find and get given by course codes
+        List<TimeTable> timeTableList= timeTableRepository.findTimeTableByCourseCodesContainsAll(courseCodes);
+        //check timetable list empty or not
+        if(!timeTableList.isEmpty()){
+            //iterate the timetable list
+            for(TimeTable timeTable1: timeTableList){
+                //check no of course codes are same
+                if(timeTable.getCourseCodes().size() == courseCodes.size()){
+                    deleteTimeTable(id);
+                }
+            }
+        }
+    }
+
+    public void deleteTimeTable(String id) throws TimeTableException {
+        timeTableRepository.findById(id)
+                .orElseThrow(()->new TimeTableException(TimeTableException.NotFoundException(id)));
+
+        timeTableRepository.deleteById(id);
     }
 }

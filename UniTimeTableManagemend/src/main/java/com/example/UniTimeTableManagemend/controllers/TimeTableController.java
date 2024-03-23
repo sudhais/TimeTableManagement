@@ -38,4 +38,14 @@ public class TimeTableController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateTimeTable(@PathVariable String id, @RequestBody List<String> courseCodes){
+        try {
+            timeTableService.updateTimeTable(id,courseCodes);
+            return new ResponseEntity<>("Updated " + id, HttpStatus.OK);
+        }catch (TimeTableException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
 }

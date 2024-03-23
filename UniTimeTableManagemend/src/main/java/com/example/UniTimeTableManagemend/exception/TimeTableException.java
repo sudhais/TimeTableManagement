@@ -8,7 +8,7 @@ public class TimeTableException extends Exception{
         super(message);
     }
 
-    public static String NotFoundException(List<String> id) {
+    public static String NotFoundException(String id) {
         return "Time Table id: " + id + " does not exists";
     }
 
