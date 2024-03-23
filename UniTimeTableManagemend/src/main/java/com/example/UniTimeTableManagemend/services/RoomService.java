@@ -57,6 +57,35 @@ public class RoomService {
 
     }
 
+    public void updateRoom(String roomid, Room room) throws RoomException, CourseException {
+        //validate new room object
+        roomValidate(room);
+
+        Room room1 = roomRepository.findById(roomid)
+                .orElseThrow(()-> new RuntimeException(RoomException.NotFoundException(roomid)));
+
+        //check same course code or not
+        if(!room1.getCourseCode().equals(room.getCourseCode())){
+            // check course code exists or not
+            courseService.findByCourseCode(room.getCourseCode());
+        }
+
+        room1.setCourseCode(room.getCourseCode());
+        room1.setStartTime(room.getStartTime());
+        room1.setEndTime(room.getEndTime());
+        room1.setDay(room.getDay());
+        room1.setLocation(room.getLocation());
+
+        //check the condition and insert
+        if(availability(room)){
+            roomRepository.save(room1);
+            System.out.println("Updated " + room1);
+        }
+
+
+    }
+
+    //check new room is available or not
     public Boolean availability(Room room) throws RoomException{
 
         //converting string to local time and initialize to the variable
@@ -79,7 +108,8 @@ public class RoomService {
                end = LocalTime.parse(room1.getEndTime(),DateTimeFormatter.ofPattern("HH:mm"));
 
                //check whether overlapping or not
-               if((startTime.isAfter(start) && startTime.isBefore(end))|| (endTime.isAfter(start) && endTime.isBefore(end)) ) {
+               if((startTime.isAfter(start) && startTime.isBefore(end))|| (endTime.isAfter(start) && endTime.isBefore(end)) ||
+                       (room.getStartTime().equals(room1.getStartTime()) && room.getEndTime().equals(room1.getEndTime()))) {
                    System.out.println("overlapping with" + room1);
                    throw new RoomException(RoomException.Overlap(room1));
                }
@@ -90,6 +120,7 @@ public class RoomService {
 
     }
 
+    //get all rooms given by day and location and sort by start time
     public List<Room> locationTimes(Day day, Location location) throws RoomException{
         Optional<List<Room>> rooms = roomRepository.findRoomByDayAndLocationOrderByStartTime(day,location);
 
@@ -101,6 +132,7 @@ public class RoomService {
 
     }
 
+    //validate room properties method
     private static void roomValidate(Room room) throws RoomException {
 
         if(room.getCourseCode() == null)

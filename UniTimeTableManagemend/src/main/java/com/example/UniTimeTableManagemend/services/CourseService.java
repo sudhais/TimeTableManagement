@@ -74,13 +74,6 @@ public class CourseService {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseException(CourseException.NotFoundException(courseId)));
 
-        if(!course1.getFaculty().isEmpty()){
-//            for (Faculty faculty : course.getFaculty()) {
-//                if (faculty == null || !(faculty instanceof Faculty)) {
-//                    System.out.println(faculty + " does not the value");
-//                }
-//            }
-        }
         course.setFaculty(course1.getFaculty());
         courseRepository.save(course);
 

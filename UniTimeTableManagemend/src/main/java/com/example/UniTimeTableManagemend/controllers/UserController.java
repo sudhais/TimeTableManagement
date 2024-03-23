@@ -34,9 +34,7 @@ public class UserController {
             return new ResponseEntity<>("successfully inserted " + user, HttpStatus.OK);
         }catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
-        }catch (UserException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
-        }catch (CourseException e){
+        }catch (UserException | CourseException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
@@ -49,9 +47,7 @@ public class UserController {
             return new ResponseEntity<>("successfully inserted " + user, HttpStatus.OK);
         }catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
-        }catch (UserException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
-        }catch (CourseException e){
+        }catch (UserException | CourseException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }

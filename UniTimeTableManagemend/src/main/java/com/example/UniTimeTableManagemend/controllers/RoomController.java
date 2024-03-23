@@ -47,9 +47,7 @@ public class RoomController {
             return new ResponseEntity<>("inserted " + room, HttpStatus.OK);
         }catch (ConstraintViolationException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
-        } catch (CourseException e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
-        }catch (RoomException e){
+        } catch (CourseException | RoomException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
@@ -60,6 +58,16 @@ public class RoomController {
             roomService.deleteRoom(roomId);
             return new ResponseEntity<>("Deleted " + roomId , HttpStatus.OK);
         }catch (RoomException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+        }
+    }
+
+    @PutMapping(path = "{roomId}")
+    public ResponseEntity<?> updateRoom(@PathVariable String roomId, @RequestBody Room room){
+        try {
+            roomService.updateRoom(roomId,room);
+            return new ResponseEntity<>("updated " + roomId , HttpStatus.OK);
+        }catch (RoomException | CourseException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
