@@ -1,9 +1,12 @@
 package com.example.UniTimeTableManagemend.controllers;
 
 import com.example.UniTimeTableManagemend.exception.CourseException;
+import com.example.UniTimeTableManagemend.exception.RoomException;
 import com.example.UniTimeTableManagemend.exception.TimeTableException;
+import com.example.UniTimeTableManagemend.models.Room;
 import com.example.UniTimeTableManagemend.models.TimeTable;
 import com.example.UniTimeTableManagemend.services.TimeTableService;
+import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +49,41 @@ public class TimeTableController {
             return new ResponseEntity<>("Updated " + id, HttpStatus.OK);
         }catch (TimeTableException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("/room")
+    public ResponseEntity<?> addClassSession(@RequestBody Room room){
+        try {
+            timeTableService.addClassSession(room);
+            return new ResponseEntity<>("Successfully inserted" + room, HttpStatus.CREATED);
+        }catch (ConstraintViolationException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
+        } catch (CourseException | RoomException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+        }
+    }
+
+    @PutMapping("/room")
+    public ResponseEntity<?> updateClassSession(@RequestBody List<Room> roomList){
+
+        try {
+           Room room = timeTableService.updateClassSession(roomList);
+            return new ResponseEntity<>("Successfully Updated" + room, HttpStatus.OK);
+        }catch (ConstraintViolationException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
+        } catch (CourseException | RoomException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+        }
+    }
+
+    @DeleteMapping("/room")
+    public ResponseEntity<?> deleteClassSession(@RequestBody Room room){
+        try {
+            timeTableService.deleteClassSession(room);
+            return new ResponseEntity<>("Successfully Deleted" + room, HttpStatus.OK);
+        } catch (RoomException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
 }

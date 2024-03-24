@@ -124,6 +124,13 @@ public class RoomService {
 
     }
 
+    //get room data given by day, location, courseCode , start time
+    public Room getRoomData(Room room) throws RoomException {
+        return roomRepository.findRoomByDayAndLocationAndCourseCodeAndStartTime(
+                room.getDay(),room.getLocation(),room.getCourseCode(),room.getStartTime())
+                .orElseThrow(()->new RoomException(RoomException.NotFoundException("....")));
+    }
+
     //get all rooms given by day and location and sort by start time
     public List<Room> locationTimes(Day day, Location location) throws RoomException{
         Optional<List<Room>> rooms = roomRepository.findRoomByDayAndLocationOrderByStartTime(day,location);

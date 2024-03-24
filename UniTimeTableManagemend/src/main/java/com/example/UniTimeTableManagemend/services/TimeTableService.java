@@ -1,12 +1,14 @@
 package com.example.UniTimeTableManagemend.services;
 
 import com.example.UniTimeTableManagemend.exception.CourseException;
+import com.example.UniTimeTableManagemend.exception.RoomException;
 import com.example.UniTimeTableManagemend.exception.TimeTableException;
 import com.example.UniTimeTableManagemend.models.Course;
 import com.example.UniTimeTableManagemend.models.Room;
 import com.example.UniTimeTableManagemend.models.Table;
 import com.example.UniTimeTableManagemend.models.TimeTable;
 import com.example.UniTimeTableManagemend.respositories.TimeTableRepository;
+import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -104,5 +106,22 @@ public class TimeTableService {
                 .orElseThrow(()->new TimeTableException(TimeTableException.NotFoundException(id)));
 
         timeTableRepository.deleteById(id);
+    }
+
+    public void addClassSession(Room room) throws CourseException, RoomException, ConstraintViolationException {
+
+        roomService.insertRoom(room);
+    }
+
+    public Room updateClassSession(List<Room> roomList) throws RoomException, ConstraintViolationException, CourseException {
+        Room room1 = roomService.getRoomData(roomList.get(0));
+        roomService.updateRoom(room1.getId(),roomList.get(1));
+        roomList.get(1).setId(room1.getId());
+        return roomList.get(1);
+    }
+
+    public void deleteClassSession(Room room) throws RoomException {
+        Room room1 = roomService.getRoomData(room);
+        roomService.deleteRoom(room1.getId());
     }
 }

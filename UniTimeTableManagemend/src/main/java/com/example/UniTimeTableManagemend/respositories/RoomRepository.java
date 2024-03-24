@@ -13,4 +13,6 @@ public interface RoomRepository extends MongoRepository<Room,String> {
 
     Optional<List<Room>> findRoomByDayAndLocationOrderByStartTime(Day day, Location location);
     Optional<List<Room>> findRoomByCourseCode(String courseCode);
+
+    Optional<Room> findRoomByDayAndLocationAndCourseCodeAndStartTime(Day day, Location location, String courseCode, String startTime);
 }
