@@ -22,6 +22,7 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private CourseService courseService;
+    private NotificationService notificationService;
 
     public List<Room> getAllRooms() {
         List<Room> rooms = roomRepository.findAll();
@@ -43,6 +44,7 @@ public class RoomService {
             //insert to mongodb
             roomRepository.insert(room);
             System.out.println("Inserted " + room);
+            notificationService.addNotification("class session added check the timetable");
         }
 
     }
@@ -53,6 +55,7 @@ public class RoomService {
             //delete room data in mongodb
             roomRepository.deleteById(roomId);
             System.out.println("Deleted " + roomId);
+            notificationService.addNotification("class session removed check the timetable");
         }else
             throw new RoomException(RoomException.NotFoundException(roomId));
 
@@ -84,6 +87,7 @@ public class RoomService {
             //update to the mongodb
             roomRepository.save(room1);
             System.out.println("Updated " + room1);
+            notificationService.addNotification("class session changed check the time table");
         }
 
 
