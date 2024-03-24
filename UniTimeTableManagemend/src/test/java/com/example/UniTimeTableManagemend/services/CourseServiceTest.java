@@ -4,6 +4,7 @@ import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.models.Course;
 import com.example.UniTimeTableManagemend.models.enums.Faculty;
 import com.example.UniTimeTableManagemend.respositories.CourseRepository;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -14,7 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 
@@ -48,19 +51,25 @@ class CourseServiceTest {
     }
 
     @Test
-    void insertCourse_Success() {
+    void getAllCourses_noDataInRepository_emptyListReturned() {
+        when(courseRepository.findAll()).thenReturn(new ArrayList<>());
 
-        try {
-            Course course = init_Course();
-            when(courseRepository.save(course)).thenReturn(course);
-            Course createdCourse = courseService.insertCourse(course);
+        List<Course> courses = courseService.getAllCourses();
 
-            assertNotNull(createdCourse);
-            assertEquals(course,createdCourse);
-        } catch (CourseException e) {
-            throw new RuntimeException(e);
-        }
+        assertNotNull(courses);
+        assertTrue(courses.isEmpty());
+    }
 
+    @Test
+    void insertCourse_courseDoesNotExist_courseInserted() throws CourseException, ConstraintViolationException {
+        Course course = new Course("C001", "Course 1", "Description 1", 3, Faculty.IT );
+
+        when(courseRepository.findCourseByCode("C001")).thenReturn(Optional.empty());
+
+        Course insertedCourse = courseService.insertCourse(course);
+
+        assertNotNull(insertedCourse);
+        assertEquals(course, insertedCourse);
     }
 
     @Test
@@ -76,7 +85,7 @@ class CourseServiceTest {
         String id = "1";
         Course existingCourse = init_Course();
         Course updatedCourse = new Course(
-                "SE3020",
+                "SE3010",
                 "DS",
                 "sddfas",
                 2,
@@ -92,6 +101,40 @@ class CourseServiceTest {
         assertEquals(updated.getName(),updated.getName());
     }
 
+    @Test
+    void updateCourseFaculty_courseExists_facultyUpdated() throws CourseException, ConstraintViolationException {
+        String courseId = "C001";
+        Course existingCourse = new Course(courseId, "Course 1", "Description 1", 3,Faculty.IT);
+        Course updatedCourse = new Course(courseId, "Course 1", "Description 1",  3, Faculty.ENGINEERING);
+
+        when(courseRepository.findById(courseId)).thenReturn(Optional.of(existingCourse));
+
+        assertDoesNotThrow(() -> courseService.updateCourseFaculty(courseId, updatedCourse));
+        assertEquals(updatedCourse.getFaculty(), existingCourse.getFaculty());
+    }
+
+    @Test
+    void findByCourseCode_courseExists_courseReturned() throws CourseException {
+        String courseCode = "C001";
+        Course course = new Course(courseCode, "Course 1", "Description 1", 3, Faculty.ENGINEERING);
+
+        when(courseRepository.findCourseByCode(courseCode)).thenReturn(Optional.of(course));
+
+        Course foundCourse = courseService.findByCourseCode(courseCode);
+
+        assertNotNull(foundCourse);
+        assertEquals(course, foundCourse);
+    }
+
+    @Test
+    void findByCourseCode_courseDoesNotExist_exceptionThrown() {
+        String courseCode = "C001";
+
+        when(courseRepository.findCourseByCode(courseCode)).thenReturn(Optional.empty());
+
+        assertThrows(CourseException.class, () -> courseService.findByCourseCode(courseCode));
+    }
+
     private Course init_Course(){
         Course course = new Course(
                 "SE3020",
@@ -100,6 +143,7 @@ class CourseServiceTest {
                 4,
                 Faculty.IT
         );
+        course.setId("1");
         return course;
     }
 

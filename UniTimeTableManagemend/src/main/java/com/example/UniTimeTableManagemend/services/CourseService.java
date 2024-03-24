@@ -6,6 +6,7 @@ import com.example.UniTimeTableManagemend.respositories.CourseRepository;
 import com.example.UniTimeTableManagemend.exception.CourseException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

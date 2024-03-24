@@ -32,7 +32,7 @@ public class UserService {
             return new ArrayList<User>();
     }
 
-    public void addNewUser(User user) throws ConstraintViolationException,UserException, CourseException {
+    public User addNewUser(User user) throws ConstraintViolationException,UserException, CourseException {
         //get the user by given name
         Optional<User> userOptional = userRepository.findUserByName(user.getName());
 
@@ -49,6 +49,7 @@ public class UserService {
             //insert data into the db
             userRepository.insert(user);
             System.out.println("inserted " + user);
+            return user;
         }
     }
 
