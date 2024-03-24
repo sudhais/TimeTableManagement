@@ -108,20 +108,51 @@ public class TimeTableService {
         timeTableRepository.deleteById(id);
     }
 
-    public void addClassSession(Room room) throws CourseException, RoomException, ConstraintViolationException {
+    public void addClassSession(Room room) throws CourseException, RoomException, ConstraintViolationException, TimeTableException {
 
         roomService.insertRoom(room);
+        timeTableChange(room.getCourseCode());
     }
 
     public Room updateClassSession(List<Room> roomList) throws RoomException, ConstraintViolationException, CourseException {
         Room room1 = roomService.getRoomData(roomList.get(0));
         roomService.updateRoom(room1.getId(),roomList.get(1));
         roomList.get(1).setId(room1.getId());
+
+        if(!roomList.get(0).getCourseCode().equals(roomList.get(1).getCourseCode())){
+            timeTableChange(roomList.get(0).getCourseCode());
+            timeTableChange(roomList.get(1).getCourseCode());
+        }else
+            timeTableChange(roomList.get(0).getCourseCode());
+
         return roomList.get(1);
     }
 
-    public void deleteClassSession(Room room) throws RoomException {
+    public void deleteClassSession(Room room) throws RoomException, TimeTableException, CourseException {
         Room room1 = roomService.getRoomData(room);
         roomService.deleteRoom(room1.getId());
+        timeTableChange(room.getCourseCode());
+    }
+
+    public void timeTableChange(String courseCode){
+
+        List<TimeTable> timeTableList = getAllTimeTable(courseCode);
+        if(timeTableList == null)
+            return;
+
+        for(TimeTable timeTable: timeTableList){
+            timeTableRepository.delete(timeTable);
+        }
+    }
+
+    //get all timetable data given by code
+    public List<TimeTable> getAllTimeTable(String courseCodes){
+        //find and get given by course codes
+        List<TimeTable> timeTableList= timeTableRepository.findTimeTableByCourseCode(courseCodes);
+        //check timetable list empty or not
+        if(!timeTableList.isEmpty()){
+            return timeTableList;
+        }else
+            return null;
     }
 }

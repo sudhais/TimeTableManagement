@@ -11,5 +11,6 @@ public interface TimeTableRepository extends MongoRepository<TimeTable,String> {
 
     @Query("{courseCodes:{$all:?0}}")
     List<TimeTable> findTimeTableByCourseCodesContainsAll(List<String> courseCodes);
-    Optional<TimeTable> findTimeTableByCourseCodes(List<String> courseCodes);
+    @Query("{courseCodes:{$eq:?0}}")
+    List<TimeTable> findTimeTableByCourseCode(String courseCodes);
 }

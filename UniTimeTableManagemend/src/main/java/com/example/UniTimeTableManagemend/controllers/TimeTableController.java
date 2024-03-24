@@ -59,7 +59,7 @@ public class TimeTableController {
             return new ResponseEntity<>("Successfully inserted" + room, HttpStatus.CREATED);
         }catch (ConstraintViolationException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
-        } catch (CourseException | RoomException e){
+        } catch (CourseException | RoomException | TimeTableException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
@@ -82,7 +82,7 @@ public class TimeTableController {
         try {
             timeTableService.deleteClassSession(room);
             return new ResponseEntity<>("Successfully Deleted" + room, HttpStatus.OK);
-        } catch (RoomException e){
+        } catch (CourseException | RoomException | TimeTableException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
