@@ -40,7 +40,7 @@ public class RoomService {
         courseService.findByCourseCode(room.getCourseCode());
 
         //check the condition and insert
-        if(availability(room)){
+        if(availability(room, false)){
             //insert to mongodb
             roomRepository.insert(room);
             System.out.println("Inserted " + room);
@@ -83,7 +83,7 @@ public class RoomService {
         room1.setLocation(room.getLocation());
 
         //check the condition and insert
-        if(availability(room)){
+        if(availability(room1,true)){
             //update to the mongodb
             roomRepository.save(room1);
             System.out.println("Updated " + room1);
@@ -94,7 +94,7 @@ public class RoomService {
     }
 
     //check new room is available or not
-    public Boolean availability(Room room) throws RoomException{
+    public Boolean availability(Room room, Boolean update) throws RoomException{
 
         //converting string to local time and initialize to the variable
         LocalTime startTime,endTime;
@@ -111,6 +111,18 @@ public class RoomService {
 
            //iterate the rooms list
            for(Room room1 : rooms.get()){
+
+               //check this is update or insert
+               if(update){
+                   //if room ids are same then ignore this time check
+                   if(room1.getId().equals(room.getId()) &&
+                           room1.getStartTime().equals(room.getStartTime()) &&
+                           room1.getEndTime().equals(room.getEndTime()) &&
+                           room1.getDay().equals(room.getDay()) &&
+                           room1.getLocation().equals(room.getLocation()))
+                       continue;
+               }
+
                //converting string to local time and initialize to the variable
                start = LocalTime.parse(room1.getStartTime(),DateTimeFormatter.ofPattern("HH:mm"));
                end = LocalTime.parse(room1.getEndTime(),DateTimeFormatter.ofPattern("HH:mm"));
