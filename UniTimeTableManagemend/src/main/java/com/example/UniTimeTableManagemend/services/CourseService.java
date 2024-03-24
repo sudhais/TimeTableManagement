@@ -29,7 +29,7 @@ public class CourseService {
             return new ArrayList<Course>();
     }
 
-    public void insertCourse(Course course) throws CourseException, ConstraintViolationException {
+    public Course insertCourse(Course course) throws CourseException, ConstraintViolationException {
         //get the course if already exists in course code
          Optional<Course> course1 = courseRepository.findCourseByCode(course.getCode());
          if(course1.isPresent()){
@@ -38,21 +38,24 @@ public class CourseService {
          }else{
              courseRepository.insert(course);
              System.out.println("inserted " + course);
+             return course;
          }
     }
 
-    public void deleteCourse(String courseId) throws CourseException {
+
+    public Boolean deleteCourse(String courseId) throws CourseException {
 
         //check given course id exists in db
         if(courseRepository.existsById(courseId)){
             courseRepository.deleteById(courseId);
             System.out.println("Deleted " + courseId);
+            return true;
         }else
             throw new CourseException(CourseException.NotFoundException("Course Id",courseId));
 
     }
 
-    public void updateCourse(String courseId, Course course1) throws ConstraintViolationException, CourseException {
+    public Course updateCourse(String courseId, Course course1) throws ConstraintViolationException, CourseException {
 
         //get the course given by course id else throw
         Course course = courseRepository.findById(courseId)
@@ -75,6 +78,7 @@ public class CourseService {
         course.setFaculty(course1.getFaculty());
         courseRepository.save(course);
         System.out.println("Updated " + course);
+        return course;
 
     }
 

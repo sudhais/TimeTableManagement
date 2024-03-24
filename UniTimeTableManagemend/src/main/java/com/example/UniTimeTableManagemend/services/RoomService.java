@@ -114,7 +114,7 @@ public class RoomService {
 
                //check this is update or insert
                if(update){
-                   //if room ids are same then ignore this time check
+                   //if room are same except course code and if it is then ignore this time check
                    if(room1.getId().equals(room.getId()) &&
                            room1.getStartTime().equals(room.getStartTime()) &&
                            room1.getEndTime().equals(room.getEndTime()) &&
