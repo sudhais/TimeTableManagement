@@ -1,4 +1,4 @@
-package com.example.UniTimeTableManagemend.mongodb.cofig;
+package com.example.UniTimeTableManagemend.cofig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
