@@ -33,13 +33,13 @@ public class UserService {
     }
 
     public User addNewUser(User user) throws ConstraintViolationException,UserException, CourseException {
-        //get the user by given name
-        Optional<User> userOptional = userRepository.findUserByName(user.getName());
+        //get the user by given email
+        Optional<User> userOptional = userRepository.findUserByEmail(user.getEmail());
 
         //check user exists or not
         if(userOptional.isPresent()){
-            System.out.println("Already user name " + user.getName() + " exist" );
-            throw new UserException(UserException.AlreadyExists(user.getName()));
+            System.out.println("Already user email " + user.getEmail() + " exist" );
+            throw new UserException(UserException.AlreadyExists(user.getEmail()));
         }else{
             System.out.println(user.getCourseCodes());
             //check all course code that are correct
@@ -59,44 +59,48 @@ public class UserService {
         User userOptional = userRepository.findById(userid)
                 .orElseThrow(()->new UserException(UserException.NotFoundException("User Id",userid)));
 
-        //check uesr name is same or not
-        if(!userOptional.getName().equals(user.getName())){
-            //get the user in db by given name
-           User user1 = findUserByName(user.getName());
+        //check user email is same or not
+        if(!userOptional.getEmail().equals(user.getEmail())){
+            //get the user in db by given email
+           User user1 = findUserByEmail(user.getEmail());
            if(user1 != null){
-               System.out.println("already username: "+ user1.getName() + " exists");
-               throw new UserException(UserException.AlreadyExists(user.getName()));
+               System.out.println("already email: "+ user1.getEmail() + " exists");
+               throw new UserException(UserException.AlreadyExists(user.getEmail()));
            }
-           userOptional.setName(user.getName());
+           userOptional.setEmail(user.getEmail());
         }
         //check all given course code is exists in db
         for(String courseCode : user.getCourseCodes()){
             courseService.findByCourseCode(courseCode);
         }
+        if(user.getRole() != null)
+            userOptional.setRole(user.getRole());
+        userOptional.setFirstName(user.getFirstName());
+        userOptional.setLastName(user.getLastName());
         userOptional.setCourseCodes(user.getCourseCodes());
-        userOptional.setRole(user.getRole());
+
         userRepository.save(userOptional);
     }
 
     //get user from db by given name
-    public User findUserByName(String name){
-        return userRepository.findUserByName(name).orElse(null);
+    public User findUserByEmail(String email){
+        return userRepository.findUserByEmail(email).orElse(null);
     }
 
-    public TimeTable getTimeTable(String userName) throws TimeTableException, CourseException, UserException {
-        User user = findUserByName(userName);
+    public TimeTable getTimeTable(String email) throws TimeTableException, CourseException, UserException {
+        User user = findUserByEmail(email);
         if(user == null){
-            throw new UserException(UserException.NotFoundException("User name",userName));
+            throw new UserException(UserException.NotFoundException("User email",email));
         }
        return timeTableService.getTimeTable(user.getCourseCodes());
     }
 
-    public void addCourseEnrollment(String userName, String courseCode) throws UserException, CourseException {
-        //get the user given by userName
-        User user = findUserByName(userName);
+    public void addCourseEnrollment(String email, String courseCode) throws UserException, CourseException {
+        //get the user given by email
+        User user = findUserByEmail(email);
         //check user null or not
         if(user == null)
-            throw new UserException(UserException.NotFoundException("User name" , userName));
+            throw new UserException(UserException.NotFoundException("User email" , email));
 
         //check course already not enrolled
         if(!user.getCourseCodes().contains(courseCode)){
@@ -112,12 +116,12 @@ public class UserService {
         throw new UserException(UserException.AlreadyExistsCode(courseCode));
     }
 
-    public void deleteCourseEnrollment(String userName, String courseCode) throws UserException {
-        //get the user given by userName
-        User user = findUserByName(userName);
+    public void deleteCourseEnrollment(String email, String courseCode) throws UserException {
+        //get the user given by email
+        User user = findUserByEmail(email);
         //check user null or not
         if(user == null)
-            throw new UserException(UserException.NotFoundException("User name" , userName));
+            throw new UserException(UserException.NotFoundException("User email" , email));
 
         //check course code enrolled
         if(user.getCourseCodes().contains(courseCode)){

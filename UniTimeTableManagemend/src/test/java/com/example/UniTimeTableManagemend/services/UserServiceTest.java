@@ -78,7 +78,7 @@ class UserServiceTest {
                 3,
                 Faculty.IT
         );
-        when(userRepository.findUserByName(user.getName())).thenReturn(Optional.empty());
+        when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.empty());
         when(courseRepository.findCourseByCode("SE2020")).thenReturn(Optional.of(course));
         when(courseRepository.findCourseByCode("SE2030")).thenReturn(Optional.of(course));
         when(userRepository.insert(user)).thenReturn(user);
@@ -93,7 +93,10 @@ class UserServiceTest {
         List<String> courseCode = new ArrayList<>();
         courseCode.add("SE3020");
         User user = new User(
+                "1",
                 "sudhais",
+                "mohamed",
+                "sudhais@gmail.com",
                 courseCode,
                 "1234",
                 Role.ADMIN
