@@ -84,13 +84,14 @@ public class CourseService {
 
     }
 
-    public void updateCourseFaculty(String courseId, Course course1) throws CourseException,ConstraintViolationException{
+    public Course updateCourseFaculty(String courseId, Course course1) throws CourseException,ConstraintViolationException{
         //find and get course if it is in the db by given course id or throw
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseException(CourseException.NotFoundException("CourseId",courseId)));
 
         course.setFaculty(course1.getFaculty());
         courseRepository.save(course);
+        return course;
 
     }
 

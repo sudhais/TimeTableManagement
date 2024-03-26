@@ -1,6 +1,7 @@
 package com.example.UniTimeTableManagemend.controllers;
 
 import com.example.UniTimeTableManagemend.models.Course;
+import com.example.UniTimeTableManagemend.models.enums.Faculty;
 import com.example.UniTimeTableManagemend.services.CourseService;
 import com.example.UniTimeTableManagemend.exception.CourseException;
 import jakarta.validation.ConstraintViolationException;
@@ -60,11 +61,11 @@ public class CourseController {
     }
 
     @PutMapping("/adminAndFaculty/course/faculty/{courseId}")
-    public ResponseEntity<String> updateCourseFaculty(@PathVariable("courseId") String courseId, @RequestBody Course course){
+    public ResponseEntity<String> updateCourseFaculty(@PathVariable("courseId") String courseId, @RequestBody Course course1){
 
         try {
-            courseService.updateCourseFaculty(courseId, course);
-            return new ResponseEntity<>("successfully updated the faculty" + course.getFaculty(), HttpStatus.OK);
+             Course course = courseService.updateCourseFaculty(courseId, course1);
+            return new ResponseEntity<>("successfully updated the faculty" + course, HttpStatus.OK);
         }catch (ConstraintViolationException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
         }catch(CourseException e) {
