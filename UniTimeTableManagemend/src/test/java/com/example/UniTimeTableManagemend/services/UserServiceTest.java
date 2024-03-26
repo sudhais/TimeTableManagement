@@ -1,5 +1,7 @@
 package com.example.UniTimeTableManagemend.services;
 
+import com.example.UniTimeTableManagemend.dto.AuthenticationResponse;
+import com.example.UniTimeTableManagemend.dto.RegisterRequest;
 import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.exception.UserException;
 import com.example.UniTimeTableManagemend.models.Course;
@@ -16,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +42,13 @@ class UserServiceTest {
     private UserService userService;
     private CourseService courseService;
     private TimeTableService timeTableService;
+    private PasswordEncoder passwordEncoder;
+    private JwtService jwtService
 
     @BeforeEach
     void setup(){
         MockitoAnnotations.openMocks(this);
-        userService = new UserService(userRepository,courseService,timeTableService);
+        userService = new UserService(userRepository,courseService,timeTableService,passwordEncoder,jwtService);
     }
 
 
@@ -64,6 +69,12 @@ class UserServiceTest {
     @Test
     void addNewUser_Success() throws CourseException, UserException {
         User user = init_user();
+        RegisterRequest request = new RegisterRequest(
+                "sudhais",
+                "mohamed",
+                "sudhais@gmail.com",
+                "s1234"
+        );
         Course course = new Course(
                 "SE2020",
                 "AS",
@@ -79,14 +90,14 @@ class UserServiceTest {
                 Faculty.IT
         );
         when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.empty());
-        when(courseRepository.findCourseByCode("SE2020")).thenReturn(Optional.of(course));
-        when(courseRepository.findCourseByCode("SE2030")).thenReturn(Optional.of(course));
+//        when(courseRepository.findCourseByCode("SE2020")).thenReturn(Optional.of(course));
+//        when(courseRepository.findCourseByCode("SE2030")).thenReturn(Optional.of(course));
         when(userRepository.insert(user)).thenReturn(user);
 
-        User actualUser = userService.addNewUser(user);
+        AuthenticationResponse actualUser = userService.addNewUser(request);
 
         assertNotNull(actualUser);
-        assertEquals(user,actualUser);
+        assertEquals(user,actualUser.getUser());
     }
 
     private User init_user() {

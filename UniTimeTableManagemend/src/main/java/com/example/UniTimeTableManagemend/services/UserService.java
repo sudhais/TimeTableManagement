@@ -1,13 +1,18 @@
 package com.example.UniTimeTableManagemend.services;
 
+import com.example.UniTimeTableManagemend.dto.AuthenticationResponse;
+import com.example.UniTimeTableManagemend.dto.RegisterRequest;
 import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.exception.TimeTableException;
 import com.example.UniTimeTableManagemend.exception.UserException;
 import com.example.UniTimeTableManagemend.models.TimeTable;
 import com.example.UniTimeTableManagemend.models.User;
+import com.example.UniTimeTableManagemend.models.enums.Role;
 import com.example.UniTimeTableManagemend.respositories.UserRepository;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,13 +20,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
-    private CourseService courseService;
-    private TimeTableService timeTableService;
+    private final CourseService courseService;
+    private final TimeTableService timeTableService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
     public List<User> getAllUsers() {
         //get all user in db
         List<User> users = userRepository.findAll();
@@ -32,24 +38,34 @@ public class UserService {
             return new ArrayList<User>();
     }
 
-    public User addNewUser(User user) throws ConstraintViolationException,UserException, CourseException {
+    public AuthenticationResponse addNewUser(RegisterRequest request) throws ConstraintViolationException,UserException, CourseException {
         //get the user by given email
-        Optional<User> userOptional = userRepository.findUserByEmail(user.getEmail());
+        Optional<User> userOptional = userRepository.findUserByEmail(request.getEmail());
 
         //check user exists or not
         if(userOptional.isPresent()){
-            System.out.println("Already user email " + user.getEmail() + " exist" );
-            throw new UserException(UserException.AlreadyExists(user.getEmail()));
+            System.out.println("Already user email " + request.getEmail() + " exist" );
+            throw new UserException(UserException.AlreadyExists(request.getEmail()));
         }else{
-            System.out.println(user.getCourseCodes());
-            //check all course code that are correct
-            for(String courseCode : user.getCourseCodes()){
-                courseService.findByCourseCode(courseCode);
-            }
+
+            var user = User.builder()
+                    .firstName(request.getFirstName())
+                    .lastName(request.getLastName())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .role(Role.STUDENT)
+                    .build();
+
             //insert data into the db
             userRepository.insert(user);
             System.out.println("inserted " + user);
-            return user;
+
+            var jwtToken = jwtService.generateToken(user);
+
+            return AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .user(user)
+                    .build();
         }
     }
 
@@ -78,6 +94,7 @@ public class UserService {
         userOptional.setFirstName(user.getFirstName());
         userOptional.setLastName(user.getLastName());
         userOptional.setCourseCodes(user.getCourseCodes());
+        userOptional.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepository.save(userOptional);
     }
@@ -87,7 +104,10 @@ public class UserService {
         return userRepository.findUserByEmail(email).orElse(null);
     }
 
-    public TimeTable getTimeTable(String email) throws TimeTableException, CourseException, UserException {
+    public TimeTable getTimeTable(String token) throws TimeTableException, CourseException, UserException {
+        //extract the email from token
+        String email = jwtService.extractUsername(token.substring(7));
+        //get the user given by email
         User user = findUserByEmail(email);
         if(user == null){
             throw new UserException(UserException.NotFoundException("User email",email));
@@ -95,41 +115,49 @@ public class UserService {
        return timeTableService.getTimeTable(user.getCourseCodes());
     }
 
-    public void addCourseEnrollment(String email, String courseCode) throws UserException, CourseException {
+    public void addCourseEnrollment(String token, String courseCode) throws UserException, CourseException {
+        //extract the email from token
+        String email = jwtService.extractUsername(token.substring(7));
         //get the user given by email
         User user = findUserByEmail(email);
         //check user null or not
         if(user == null)
             throw new UserException(UserException.NotFoundException("User email" , email));
 
-        //check course already not enrolled
-        if(!user.getCourseCodes().contains(courseCode)){
-            //check course code exists in the db
-            courseService.findByCourseCode(courseCode);
-            //add course code to the user
-            user.getCourseCodes().add(courseCode);
-            //update user to the db
-            userRepository.save(user);
-            return;
+        if(user.getCourseCodes() != null){
+            //check course already not enrolled
+            if(!user.getCourseCodes().contains(courseCode)){
+                //check course code exists in the db
+                courseService.findByCourseCode(courseCode);
+                //add course code to the user
+                user.getCourseCodes().add(courseCode);
+                //update user to the db
+                userRepository.save(user);
+                return;
+            }
         }
 
         throw new UserException(UserException.AlreadyExistsCode(courseCode));
     }
 
-    public void deleteCourseEnrollment(String email, String courseCode) throws UserException {
+    public void deleteCourseEnrollment(String token, String courseCode) throws UserException {
+        //extract the email from token
+        String email = jwtService.extractUsername(token.substring(7));
         //get the user given by email
         User user = findUserByEmail(email);
         //check user null or not
         if(user == null)
             throw new UserException(UserException.NotFoundException("User email" , email));
 
-        //check course code enrolled
-        if(user.getCourseCodes().contains(courseCode)){
-            //add course code to the user
-            user.getCourseCodes().remove(courseCode);
-            //update user to the db
-            userRepository.save(user);
-            return;
+        if(user.getCourseCodes() != null){
+            //check course code enrolled
+            if(user.getCourseCodes().contains(courseCode)){
+                //add course code to the user
+                user.getCourseCodes().remove(courseCode);
+                //update user to the db
+                userRepository.save(user);
+                return;
+            }
         }
         throw new UserException(UserException.NotEnrolled(courseCode));
     }

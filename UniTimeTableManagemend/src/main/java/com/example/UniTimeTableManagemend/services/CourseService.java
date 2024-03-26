@@ -37,6 +37,7 @@ public class CourseService {
              System.out.println("Already course code " + course.getCode() + " exist" );
              throw new CourseException(CourseException.AlreadyExists(course.getCode()));
          }else{
+             course.setFaculty(null);
              courseRepository.insert(course);
              System.out.println("inserted " + course);
              return course;

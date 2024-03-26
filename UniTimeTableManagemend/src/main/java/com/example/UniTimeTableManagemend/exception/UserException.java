@@ -15,7 +15,7 @@ public class UserException extends Exception{
     }
 
     public static String AlreadyExists(String name) {
-        return "User name: " + name + " Already exists";
+        return "User email: " + name + " Already exists";
     }
 
     public static String AlreadyExistsCode(String name){

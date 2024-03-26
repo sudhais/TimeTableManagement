@@ -3,8 +3,8 @@ package com.example.UniTimeTableManagemend.services;
 import com.example.UniTimeTableManagemend.dto.AuthenticationRequest;
 import com.example.UniTimeTableManagemend.dto.AuthenticationResponse;
 import com.example.UniTimeTableManagemend.dto.RegisterRequest;
-import com.example.UniTimeTableManagemend.models.enums.Role;
 import com.example.UniTimeTableManagemend.models.User;
+import com.example.UniTimeTableManagemend.models.enums.Role;
 import com.example.UniTimeTableManagemend.respositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +21,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     public AuthenticationResponse register(RegisterRequest request) {
+
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())

@@ -27,13 +27,12 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         request -> request
-                                .requestMatchers("api/v1/auth/**")
-                                .permitAll()
+                                .requestMatchers("api/v1/auth/**").permitAll()
                                 .requestMatchers("api/v1/admin/**").hasAnyAuthority(Role.ADMIN.name())
                                 .requestMatchers("api/v1/user/**").hasAnyAuthority(Role.STUDENT.name())
-                                .requestMatchers("api/v1/faculty/**").hasAnyAuthority(Role.STUDENT.name())
-                                .anyRequest()
-                                .authenticated()
+                                .requestMatchers("api/v1/faculty/**").hasAnyAuthority(Role.FACULTY.name())
+                                .requestMatchers("api/v1/adminAndFaculty/**").hasAnyAuthority(Role.ADMIN.name(), Role.FACULTY.name())
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(
                         manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

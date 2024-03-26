@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/course")
+@RequestMapping("api/v1")
 @AllArgsConstructor
 public class CourseController {
 
     private CourseService courseService;
 
-    @GetMapping
+    @GetMapping("/admin/course")
     public ResponseEntity<?> getAllCourses(){
         List<Course> courses = courseService.getAllCourses();
         return new ResponseEntity<>(courses, courses.size() > 0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping
+    @PostMapping("/adminAndFaculty/course")
     public ResponseEntity<?> insertCourse(@RequestBody Course course){
         try {
             courseService.insertCourse(course);
@@ -60,7 +60,7 @@ public class CourseController {
     }
 
     @PutMapping("/faculty/{courseId}")
-    public ResponseEntity<String> updateCourseFuclty(@PathVariable("courseId") String courseId, @RequestBody Course course){
+    public ResponseEntity<String> updateCourseFaculty(@PathVariable("courseId") String courseId, @RequestBody Course course){
 
         try {
             courseService.updateCourseFaculty(courseId, course);
