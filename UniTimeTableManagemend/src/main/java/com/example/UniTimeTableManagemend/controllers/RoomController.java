@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/room")
+@RequestMapping("api/v1")
 @AllArgsConstructor
 public class RoomController {
 
     private RoomService roomService;
 
-    @GetMapping
+    @GetMapping("/adminAndFaculty/room")
     public ResponseEntity<?> getAllRooms(){
         List<Room> rooms = roomService.getAllRooms();
         return new ResponseEntity<>(rooms, HttpStatus.CREATED);
     }
 
-    @GetMapping("/filter")
+    @GetMapping("/adminAndFaculty/room/filter")
     public ResponseEntity<?> getAllRoomsByLocation(@RequestParam String day , @RequestParam String location){
         try {
             List<Room> rooms = roomService.locationTimes(Day.valueOf(day),Location.valueOf(location));
@@ -39,7 +39,7 @@ public class RoomController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/adminAndFaculty/room")
     public ResponseEntity<?> insertRoom(@RequestBody Room room){
 
         try {
@@ -52,7 +52,7 @@ public class RoomController {
         }
     }
 
-    @DeleteMapping(path = "{roomId}")
+    @DeleteMapping("/adminAndFaculty/room/{roomId}")
     public ResponseEntity<?> deleteRoom(@PathVariable String roomId){
         try {
             roomService.deleteRoom(roomId);
@@ -62,7 +62,7 @@ public class RoomController {
         }
     }
 
-    @PutMapping(path = "{roomId}")
+    @PutMapping("/adminAndFaculty/room/{roomId}")
     public ResponseEntity<?> updateRoom(@PathVariable String roomId, @RequestBody Room room){
         try {
             roomService.updateRoom(roomId,room);

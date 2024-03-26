@@ -18,7 +18,7 @@ public class CourseController {
 
     private CourseService courseService;
 
-    @GetMapping("/admin/course")
+    @GetMapping("/adminAndFaculty/course")
     public ResponseEntity<?> getAllCourses(){
         List<Course> courses = courseService.getAllCourses();
         return new ResponseEntity<>(courses, courses.size() > 0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
@@ -36,7 +36,7 @@ public class CourseController {
         }
     }
 
-    @DeleteMapping(path = "{courseId}")
+    @DeleteMapping("/adminAndFaculty/course/{courseId}")
     public ResponseEntity<?> deleteCourse(@PathVariable("courseId") String courseId){
         try {
             courseService.deleteCourse(courseId);
@@ -46,7 +46,7 @@ public class CourseController {
         }
     }
 
-    @PutMapping(path = "{courseId}")
+    @PutMapping("/adminAndFaculty/course/{courseId}")
     public ResponseEntity<String> updateCourse(@PathVariable("courseId") String courseId, @RequestBody Course course){
 
        try {
@@ -59,12 +59,12 @@ public class CourseController {
        }
     }
 
-    @PutMapping("/faculty/{courseId}")
+    @PutMapping("/adminAndFaculty/course/faculty/{courseId}")
     public ResponseEntity<String> updateCourseFaculty(@PathVariable("courseId") String courseId, @RequestBody Course course){
 
         try {
             courseService.updateCourseFaculty(courseId, course);
-            return new ResponseEntity<>("successfully added the faculty" + course, HttpStatus.OK);
+            return new ResponseEntity<>("successfully updated the faculty" + course.getFaculty(), HttpStatus.OK);
         }catch (ConstraintViolationException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
         }catch(CourseException e) {

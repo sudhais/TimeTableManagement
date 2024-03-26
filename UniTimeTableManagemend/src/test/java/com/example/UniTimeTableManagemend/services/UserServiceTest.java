@@ -73,7 +73,8 @@ class UserServiceTest {
                 "sudhais",
                 "mohamed",
                 "sudhais@gmail.com",
-                "s1234"
+                "s1234",
+                Role.ADMIN
         );
         Course course = new Course(
                 "SE2020",

@@ -7,7 +7,7 @@ import com.example.UniTimeTableManagemend.models.Room;
 import com.example.UniTimeTableManagemend.models.TimeTable;
 import com.example.UniTimeTableManagemend.services.TimeTableService;
 import jakarta.validation.ConstraintViolationException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/timetable")
-@AllArgsConstructor
+@RequestMapping("api/v1")
+@RequiredArgsConstructor
 public class TimeTableController {
 
-    private TimeTableService timeTableService;
+    private final TimeTableService timeTableService;
 
-    @GetMapping
+    @GetMapping("/adminAndFaculty/timetable")
     public ResponseEntity<?> getTimeTable(@RequestBody List<String> courseCodes){
         try {
            TimeTable timeTable1 = timeTableService.getTimeTable(courseCodes);
@@ -31,7 +31,7 @@ public class TimeTableController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/adminAndFaculty/timetable")
     public ResponseEntity<?> addTimeTable(@RequestBody List<String> courseCodes) {
 
         try {
@@ -42,17 +42,27 @@ public class TimeTableController {
         }
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<?> updateTimeTable(@PathVariable String id, @RequestBody List<String> courseCodes){
+//    @PutMapping("/adminAndFaculty/timetable/{id}")
+//    public ResponseEntity<?> updateTimeTable(@PathVariable String id, @RequestBody List<String> courseCodes){
+//        try {
+//            timeTableService.updateTimeTable(id,courseCodes);
+//            return new ResponseEntity<>("Updated " + id, HttpStatus.OK);
+//        }catch (TimeTableException e){
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+//        }
+//    }
+
+    @DeleteMapping("/adminAndFaculty/timetable/{id}")
+    public ResponseEntity<?> deleteTimetable(@PathVariable String id){
         try {
-            timeTableService.updateTimeTable(id,courseCodes);
-            return new ResponseEntity<>("Updated " + id, HttpStatus.OK);
-        }catch (TimeTableException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            timeTableService.deleteTimeTable(id);
+            return new ResponseEntity<>("Successfully Deleted" + id, HttpStatus.OK);
+        } catch (TimeTableException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
 
-    @PostMapping("/room")
+    @PostMapping("/adminAndFaculty/timetable/room")
     public ResponseEntity<?> addClassSession(@RequestBody Room room){
         try {
             timeTableService.addClassSession(room);
@@ -64,7 +74,7 @@ public class TimeTableController {
         }
     }
 
-    @PutMapping("/room")
+    @PutMapping("/adminAndFaculty/timetable/room")
     public ResponseEntity<?> updateClassSession(@RequestBody List<Room> roomList){
 
         try {
@@ -77,7 +87,7 @@ public class TimeTableController {
         }
     }
 
-    @DeleteMapping("/room")
+    @DeleteMapping("/adminAndFaculty/timetable/room")
     public ResponseEntity<?> deleteClassSession(@RequestBody Room room){
         try {
             timeTableService.deleteClassSession(room);

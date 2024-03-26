@@ -9,19 +9,19 @@ import com.example.UniTimeTableManagemend.models.Table;
 import com.example.UniTimeTableManagemend.models.TimeTable;
 import com.example.UniTimeTableManagemend.respositories.TimeTableRepository;
 import jakarta.validation.ConstraintViolationException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TimeTableService {
 
     private final TimeTableRepository timeTableRepository;
-    private CourseService courseService;
-    private RoomService roomService;
+    private final CourseService courseService;
+    private final RoomService roomService;
 
     public TimeTable getTimeTable(List<String> courseCodes) throws TimeTableException, CourseException {
         //find and get given by course codes
@@ -82,24 +82,24 @@ public class TimeTableService {
         timeTableRepository.insert(new TimeTable(courseCodes, tables));
     }
 
-    public void updateTimeTable(String id,List<String> courseCodes) throws TimeTableException {
-
-        TimeTable timeTable = timeTableRepository.findById(id)
-                .orElseThrow(()->new TimeTableException(TimeTableException.NotFoundException(id)));
-
-        //find and get given by course codes
-        List<TimeTable> timeTableList= timeTableRepository.findTimeTableByCourseCodesContainsAll(courseCodes);
-        //check timetable list empty or not
-        if(!timeTableList.isEmpty()){
-            //iterate the timetable list
-            for(TimeTable timeTable1: timeTableList){
-                //check no of course codes are same
-                if(timeTable.getCourseCodes().size() == courseCodes.size()){
-                    deleteTimeTable(id);
-                }
-            }
-        }
-    }
+//    public void updateTimeTable(String id,List<String> courseCodes) throws TimeTableException {
+//
+//        TimeTable timeTable = timeTableRepository.findById(id)
+//                .orElseThrow(()->new TimeTableException(TimeTableException.NotFoundException(id)));
+//
+//        //find and get given by course codes
+//        List<TimeTable> timeTableList= timeTableRepository.findTimeTableByCourseCodesContainsAll(courseCodes);
+//        //check timetable list empty or not
+//        if(!timeTableList.isEmpty()){
+//            //iterate the timetable list
+//            for(TimeTable timeTable1: timeTableList){
+//                //check no of course codes are same
+//                if(timeTable.getCourseCodes().size() == courseCodes.size()){
+//                    deleteTimeTable(id);
+//                }
+//            }
+//        }
+//    }
 
     public void deleteTimeTable(String id) throws TimeTableException {
         timeTableRepository.findById(id)

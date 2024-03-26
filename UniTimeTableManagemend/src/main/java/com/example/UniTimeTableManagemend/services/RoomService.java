@@ -128,8 +128,10 @@ public class RoomService {
                end = LocalTime.parse(room1.getEndTime(),DateTimeFormatter.ofPattern("HH:mm"));
 
                //check whether overlapping or not
-               if((startTime.isAfter(start) && startTime.isBefore(end))|| (endTime.isAfter(start) && endTime.isBefore(end)) ||
-                       (room.getStartTime().equals(room1.getStartTime()) && room.getEndTime().equals(room1.getEndTime()))) {
+               if((startTime.isAfter(start) && startTime.isBefore(end))||
+                       (endTime.isAfter(start) && endTime.isBefore(end)) ||
+                       (startTime.equals(start) && endTime.equals(end))
+               ) {
                    System.out.println("overlapping with" + room1);
                    throw new RoomException(RoomException.Overlap(room1));
                }

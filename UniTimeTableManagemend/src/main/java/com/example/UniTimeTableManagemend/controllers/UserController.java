@@ -1,6 +1,5 @@
 package com.example.UniTimeTableManagemend.controllers;
 
-import com.example.UniTimeTableManagemend.dto.AuthenticationResponse;
 import com.example.UniTimeTableManagemend.dto.RegisterRequest;
 import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.exception.TimeTableException;
@@ -8,7 +7,6 @@ import com.example.UniTimeTableManagemend.exception.UserException;
 import com.example.UniTimeTableManagemend.models.User;
 import com.example.UniTimeTableManagemend.services.UserService;
 import jakarta.validation.ConstraintViolationException;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
