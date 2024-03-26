@@ -43,7 +43,7 @@ class UserServiceTest {
     private CourseService courseService;
     private TimeTableService timeTableService;
     private PasswordEncoder passwordEncoder;
-    private JwtService jwtService
+    private JwtService jwtService;
 
     @BeforeEach
     void setup(){
