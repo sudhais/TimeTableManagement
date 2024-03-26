@@ -1,5 +1,6 @@
 package com.example.UniTimeTableManagemend.controllers;
 
+import com.example.UniTimeTableManagemend.dto.EnrollmentResponse;
 import com.example.UniTimeTableManagemend.dto.RegisterRequest;
 import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.exception.TimeTableException;
@@ -21,11 +22,30 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("admin/student/getAll")
+    @GetMapping("/admin/student/getAll")
     public ResponseEntity<List<User>> getAllStudents(){
         List<User> users = userService.getAllUsers();
         return new ResponseEntity<>(users, users.size() > 0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/adminAndFaculty/student/enrollDetails")
+    public ResponseEntity<?> getStudentEnrollDetails(@RequestParam("email") String email ){
+        try {
+            return new ResponseEntity<>(userService.getStudentEnrollDetails(email),HttpStatus.OK);
+        }catch (UserException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+        }
+    }
+
+    @PutMapping("/adminAndFaculty/student/enrollDetails")
+    public ResponseEntity<?> getStudentEnrollDetails(@RequestBody EnrollmentResponse enroll){
+        try {
+            return new ResponseEntity<>(userService.updateStudentEnrollDetails(enroll),HttpStatus.OK);
+        }catch (UserException | CourseException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+        }
+    }
+
 
     @PostMapping("/auth/student/register")
     public ResponseEntity<?> addNewStudent(@RequestBody RegisterRequest request){
@@ -70,7 +90,6 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
         }
     }
-
     @GetMapping("/student/timetable")
     public ResponseEntity<?> getTimetable(@RequestHeader("Authorization") String token){
         try {

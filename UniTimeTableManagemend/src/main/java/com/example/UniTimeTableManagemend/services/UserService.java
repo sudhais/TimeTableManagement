@@ -1,6 +1,7 @@
 package com.example.UniTimeTableManagemend.services;
 
 import com.example.UniTimeTableManagemend.dto.AuthenticationResponse;
+import com.example.UniTimeTableManagemend.dto.EnrollmentResponse;
 import com.example.UniTimeTableManagemend.dto.RegisterRequest;
 import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.exception.TimeTableException;
@@ -159,5 +160,38 @@ public class UserService {
             }
         }
         throw new UserException(UserException.NotEnrolled(courseCode));
+    }
+
+    public EnrollmentResponse getStudentEnrollDetails(String email) throws UserException {
+        //get the user given by email
+        User user = findUserByEmail(email);
+        //check user null or not
+        if(user == null)
+            throw new UserException(UserException.NotFoundException("User email" , email));
+        return EnrollmentResponse.builder()
+                .email(user.getEmail())
+                .courseCodes(user.getCourseCodes())
+                .build();
+    }
+
+    public EnrollmentResponse updateStudentEnrollDetails(EnrollmentResponse enroll) throws UserException, CourseException {
+        //get the user given by email
+        User user = findUserByEmail(enroll.getEmail());
+        //check user null or not
+        if(user == null)
+            throw new UserException(UserException.NotFoundException("User email" , enroll.getEmail()));
+
+        if(user.getRole() == Role.ADMIN || user.getRole() == Role.FACULTY)
+            throw new UserException(UserException.RoleConflict(user.getRole()));
+
+        //check all given course code is exists in db
+        if(enroll.getCourseCodes() != null){
+            for(String courseCode : enroll.getCourseCodes()){
+                courseService.findByCourseCode(courseCode);
+            }
+        }
+        user.setCourseCodes(enroll.getCourseCodes());
+        userRepository.save(user);
+        return enroll;
     }
 }
