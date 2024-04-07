@@ -18,7 +18,8 @@ public class NotificationController {
 
     @GetMapping("/auth/notification")
     public ResponseEntity<List<Notification>> getNotification(){
-        return new ResponseEntity<>(notificationService.getNotification(), HttpStatus.OK);
+        List<Notification> notifications = notificationService.getNotification();
+        return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
     @PostMapping("/adminAndFaculty/notification")
