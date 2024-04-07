@@ -1,8 +1,6 @@
 package com.example.UniTimeTableManagemend.controllers;
 
-import com.example.UniTimeTableManagemend.dto.AuthenticationRequest;
-import com.example.UniTimeTableManagemend.dto.AuthenticationResponse;
-import com.example.UniTimeTableManagemend.dto.RegisterRequest;
+import com.example.UniTimeTableManagemend.dto.*;
 import com.example.UniTimeTableManagemend.exception.UserException;
 import com.example.UniTimeTableManagemend.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +30,11 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> signIn(@RequestBody AuthenticationRequest request){
         return ResponseEntity.ok(authenticationService.authenticate(request));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest){
+        System.out.println(refreshTokenRequest);
+        return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
     }
 }

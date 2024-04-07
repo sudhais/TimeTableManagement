@@ -1,6 +1,5 @@
 package com.example.UniTimeTableManagemend.dto;
 
-import com.example.UniTimeTableManagemend.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
-
+public class RefreshTokenRequest {
     private String token;
-
-    private String refreshToken;
-    private User user;
 }

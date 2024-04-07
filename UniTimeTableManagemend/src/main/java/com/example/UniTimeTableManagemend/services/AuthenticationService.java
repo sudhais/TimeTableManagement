@@ -1,8 +1,6 @@
 package com.example.UniTimeTableManagemend.services;
 
-import com.example.UniTimeTableManagemend.dto.AuthenticationRequest;
-import com.example.UniTimeTableManagemend.dto.AuthenticationResponse;
-import com.example.UniTimeTableManagemend.dto.RegisterRequest;
+import com.example.UniTimeTableManagemend.dto.*;
 import com.example.UniTimeTableManagemend.exception.UserException;
 import com.example.UniTimeTableManagemend.models.User;
 import com.example.UniTimeTableManagemend.models.enums.Role;
@@ -13,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -65,9 +64,30 @@ public class AuthenticationService {
         var user = userRepository.findUserByEmail(request.getEmail())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(new HashMap<>(),user);
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
+    }
+
+    public RefreshTokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
+        String userEmail = jwtService.extractUsername(refreshTokenRequest.getToken());
+        var user = userRepository.findUserByEmail(userEmail).orElseThrow();
+
+        if(jwtService.isTokenValid(refreshTokenRequest.getToken(),user)){
+            var jwt = jwtService.generateToken(user);
+
+            RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
+
+            refreshTokenResponse.setToken(jwt);
+            refreshTokenResponse.setRefreshToken(refreshTokenRequest.getToken());
+
+            return refreshTokenResponse;
+        }
+
+        return null;
+
     }
 }
