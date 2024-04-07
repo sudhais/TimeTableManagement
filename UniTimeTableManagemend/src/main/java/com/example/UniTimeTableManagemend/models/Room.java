@@ -3,12 +3,14 @@ package com.example.UniTimeTableManagemend.models;
 import com.example.UniTimeTableManagemend.models.enums.Day;
 import com.example.UniTimeTableManagemend.models.enums.Location;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @Data
+@AllArgsConstructor
 public class Room {
 
     @Id

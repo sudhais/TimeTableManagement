@@ -3,13 +3,14 @@ package com.example.UniTimeTableManagemend.services;
 import com.example.UniTimeTableManagemend.models.Notification;
 import com.example.UniTimeTableManagemend.respositories.NotificationRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;

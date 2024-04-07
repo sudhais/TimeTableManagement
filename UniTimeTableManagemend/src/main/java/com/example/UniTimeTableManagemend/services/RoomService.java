@@ -7,7 +7,7 @@ import com.example.UniTimeTableManagemend.models.enums.Day;
 import com.example.UniTimeTableManagemend.models.enums.Location;
 import com.example.UniTimeTableManagemend.respositories.RoomRepository;
 import jakarta.validation.ConstraintViolationException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RoomService {
 
     private final RoomRepository roomRepository;
-    private CourseService courseService;
-    private NotificationService notificationService;
+    private final CourseService courseService;
+    private final NotificationService notificationService;
 
     public List<Room> getAllRooms() {
         List<Room> rooms = roomRepository.findAll();
@@ -67,7 +67,7 @@ public class RoomService {
 
         //check room id exists or not if not throw that there were no data with roomid
         Room room1 = roomRepository.findById(roomid)
-                .orElseThrow(()-> new RuntimeException(RoomException.NotFoundException(roomid)));
+                .orElseThrow(()-> new RoomException(RoomException.NotFoundException(roomid)));
 
         //check same course code or not
         if(!room1.getCourseCode().equals(room.getCourseCode())){
