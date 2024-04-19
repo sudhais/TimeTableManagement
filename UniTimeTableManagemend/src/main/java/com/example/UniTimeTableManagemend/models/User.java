@@ -35,8 +35,8 @@ public class User implements UserDetails {
     @NotBlank(message = "last name cannot be blank")
     private String lastName;
 
-    @NotNull(message = "email name cannot be null")
-    @NotBlank(message = "email name cannot be blank")
+    @NotNull(message = "email cannot be null")
+    @NotBlank(message = "email cannot be blank")
     @Indexed(unique = true)
     private String email;
     private List<String> courseCodes;
