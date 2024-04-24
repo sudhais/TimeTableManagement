@@ -5,9 +5,11 @@ import com.example.UniTimeTableManagemend.exception.RoomException;
 import com.example.UniTimeTableManagemend.models.Course;
 import com.example.UniTimeTableManagemend.models.Room;
 import com.example.UniTimeTableManagemend.models.enums.Day;
-import com.example.UniTimeTableManagemend.models.enums.Faculty;
 import com.example.UniTimeTableManagemend.models.enums.Location;
 import com.example.UniTimeTableManagemend.respositories.RoomRepository;
+import com.example.UniTimeTableManagemend.services.Impl.CourseServiceImp;
+import com.example.UniTimeTableManagemend.services.Impl.NotificationServiceImp;
+import com.example.UniTimeTableManagemend.services.Impl.RoomServiceImp;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -30,13 +32,13 @@ class RoomServiceTest {
     private RoomRepository roomRepository;
 
     @Mock
-    private CourseService courseService;
+    private CourseServiceImp courseService;
 
     @Mock
-    private NotificationService notificationService;
+    private NotificationServiceImp notificationService;
 
     @InjectMocks
-    private RoomService roomService;
+    private RoomServiceImp roomService;
 
 
     @Test

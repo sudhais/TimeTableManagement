@@ -2,6 +2,7 @@ package com.example.UniTimeTableManagemend.services;
 
 import com.example.UniTimeTableManagemend.models.Notification;
 import com.example.UniTimeTableManagemend.respositories.NotificationRepository;
+import com.example.UniTimeTableManagemend.services.Impl.NotificationServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,7 +25,7 @@ class NotificationServiceTest {
     private NotificationRepository notificationRepository;
 
     @InjectMocks
-    private NotificationService notificationService;
+    private NotificationServiceImp notificationService;
 
     @BeforeEach
     void setUp() {

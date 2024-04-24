@@ -4,6 +4,7 @@ import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.models.Course;
 import com.example.UniTimeTableManagemend.models.enums.Faculty;
 import com.example.UniTimeTableManagemend.respositories.CourseRepository;
+import com.example.UniTimeTableManagemend.services.Impl.CourseServiceImp;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +29,12 @@ class CourseServiceTest {
     private CourseRepository courseRepository;
 
     @InjectMocks
-    private CourseService courseService;
+    private CourseServiceImp courseService;
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        courseService = new CourseService(courseRepository);
+        courseService = new CourseServiceImp(courseRepository);
     }
 
     @Test

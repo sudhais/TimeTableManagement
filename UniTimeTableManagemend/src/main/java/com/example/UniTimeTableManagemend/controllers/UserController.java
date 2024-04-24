@@ -6,6 +6,7 @@ import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.exception.TimeTableException;
 import com.example.UniTimeTableManagemend.exception.UserException;
 import com.example.UniTimeTableManagemend.models.User;
+import com.example.UniTimeTableManagemend.services.Impl.UserServiceImp;
 import com.example.UniTimeTableManagemend.services.UserService;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;

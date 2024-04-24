@@ -1,6 +1,7 @@
 package com.example.UniTimeTableManagemend.controllers;
 
 import com.example.UniTimeTableManagemend.models.Notification;
+import com.example.UniTimeTableManagemend.services.Impl.NotificationServiceImp;
 import com.example.UniTimeTableManagemend.services.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -5,6 +5,7 @@ import com.example.UniTimeTableManagemend.exception.RoomException;
 import com.example.UniTimeTableManagemend.exception.TimeTableException;
 import com.example.UniTimeTableManagemend.models.Room;
 import com.example.UniTimeTableManagemend.models.TimeTable;
+import com.example.UniTimeTableManagemend.services.Impl.TimeTableServiceImp;
 import com.example.UniTimeTableManagemend.services.TimeTableService;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;

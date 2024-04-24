@@ -11,14 +11,12 @@ import com.example.UniTimeTableManagemend.models.enums.Role;
 import com.example.UniTimeTableManagemend.respositories.CourseRepository;
 import com.example.UniTimeTableManagemend.respositories.TimeTableRepository;
 import com.example.UniTimeTableManagemend.respositories.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.UniTimeTableManagemend.services.Impl.CourseServiceImp;
+import com.example.UniTimeTableManagemend.services.Impl.TimeTableServiceImp;
+import com.example.UniTimeTableManagemend.services.Impl.UserServiceImp;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -40,16 +38,16 @@ class UserServiceTest {
     private TimeTableRepository timeTableRepository;
 
     @Mock
-    private CourseService courseService;
+    private CourseServiceImp courseService;
     @Mock
-    private TimeTableService timeTableService;
+    private TimeTableServiceImp timeTableService;
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
     private JwtService jwtService;
 
     @InjectMocks
-    private UserService userService;
+    private UserServiceImp userService;
 
 
     @Test

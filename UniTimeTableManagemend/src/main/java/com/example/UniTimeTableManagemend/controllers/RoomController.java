@@ -5,6 +5,7 @@ import com.example.UniTimeTableManagemend.exception.RoomException;
 import com.example.UniTimeTableManagemend.models.Room;
 import com.example.UniTimeTableManagemend.models.enums.Day;
 import com.example.UniTimeTableManagemend.models.enums.Location;
+import com.example.UniTimeTableManagemend.services.Impl.RoomServiceImp;
 import com.example.UniTimeTableManagemend.services.RoomService;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;

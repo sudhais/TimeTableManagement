@@ -10,14 +10,13 @@ import com.example.UniTimeTableManagemend.models.TimeTable;
 import com.example.UniTimeTableManagemend.models.enums.Day;
 import com.example.UniTimeTableManagemend.models.enums.Location;
 import com.example.UniTimeTableManagemend.respositories.TimeTableRepository;
+import com.example.UniTimeTableManagemend.services.Impl.CourseServiceImp;
+import com.example.UniTimeTableManagemend.services.Impl.RoomServiceImp;
+import com.example.UniTimeTableManagemend.services.Impl.TimeTableServiceImp;
 import jakarta.validation.ConstraintViolationException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -35,13 +34,13 @@ class TimeTableServiceTest {
     private TimeTableRepository timeTableRepository;
 
     @Mock
-    private CourseService courseService;
+    private CourseServiceImp courseService;
 
     @Mock
-    private RoomService roomService;
+    private RoomServiceImp roomService;
 
     @InjectMocks
-    private TimeTableService timeTableService;
+    private TimeTableServiceImp timeTableService;
 
 
     @Test
