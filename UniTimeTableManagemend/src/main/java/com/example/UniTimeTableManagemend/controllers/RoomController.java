@@ -45,7 +45,7 @@ public class RoomController {
 
         try {
             roomService.insertRoom(room);
-            return new ResponseEntity<>("inserted " + room, HttpStatus.OK);
+            return new ResponseEntity<>(room, HttpStatus.CREATED);
         }catch (ConstraintViolationException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (CourseException | RoomException e){

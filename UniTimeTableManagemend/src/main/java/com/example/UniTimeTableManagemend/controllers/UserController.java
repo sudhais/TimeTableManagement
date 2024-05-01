@@ -51,7 +51,7 @@ public class UserController {
     @PostMapping("/auth/student/register")
     public ResponseEntity<?> addNewStudent(@RequestBody RegisterRequest request){
         try {
-            return new ResponseEntity<>(userService.addNewUser(request), HttpStatus.OK);
+            return new ResponseEntity<>(userService.addNewUser(request), HttpStatus.CREATED);
         }catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
         }catch (UserException | CourseException e) {

@@ -28,7 +28,7 @@ public class CourseController {
     public ResponseEntity<?> insertCourse(@RequestBody Course course){
         try {
             courseService.insertCourse(course);
-            return new ResponseEntity<>("successfully inserted " + course, HttpStatus.OK);
+            return new ResponseEntity<>(course, HttpStatus.CREATED);
         }catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
         }catch (CourseException e) {
