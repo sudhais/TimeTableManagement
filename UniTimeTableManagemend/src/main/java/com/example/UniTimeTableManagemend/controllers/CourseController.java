@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/course")
+@RequestMapping("api/v1")
 @AllArgsConstructor
 public class CourseController {
 
     private CourseService courseService;
 
-    @GetMapping
+    @GetMapping("/adminAndFaculty/course")
     public ResponseEntity<?> getAllCourses(){
         List<Course> courses = courseService.getAllCourses();
         return new ResponseEntity<>(courses, courses.size() > 0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping
+    @PostMapping("/adminAndFaculty/course")
     public ResponseEntity<?> insertCourse(@RequestBody Course course){
         try {
             courseService.insertCourse(course);
@@ -36,7 +36,7 @@ public class CourseController {
         }
     }
 
-    @DeleteMapping(path = "{courseId}")
+    @DeleteMapping("/adminAndFaculty/course/{courseId}")
     public ResponseEntity<?> deleteCourse(@PathVariable("courseId") String courseId){
         try {
             courseService.deleteCourse(courseId);
@@ -46,7 +46,7 @@ public class CourseController {
         }
     }
 
-    @PutMapping(path = "{courseId}")
+    @PutMapping("/adminAndFaculty/course/{courseId}")
     public ResponseEntity<String> updateCourse(@PathVariable("courseId") String courseId, @RequestBody Course course){
 
        try {
@@ -59,12 +59,12 @@ public class CourseController {
        }
     }
 
-    @PutMapping("/faculty/{courseId}")
-    public ResponseEntity<String> updateCourseFuclty(@PathVariable("courseId") String courseId, @RequestBody Course course){
+    @PutMapping("/adminAndFaculty/course/faculty/{courseId}")
+    public ResponseEntity<String> updateCourseFaculty(@PathVariable("courseId") String courseId, @RequestBody Course course1){
 
         try {
-            courseService.updateCourseFaculty(courseId, course);
-            return new ResponseEntity<>("successfully added the faculty" + course, HttpStatus.OK);
+             Course course = courseService.updateCourseFaculty(courseId, course1);
+            return new ResponseEntity<>("successfully updated the faculty" + course, HttpStatus.OK);
         }catch (ConstraintViolationException e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
         }catch(CourseException e) {

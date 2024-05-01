@@ -4,9 +4,11 @@ import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.models.Course;
 import com.example.UniTimeTableManagemend.models.enums.Faculty;
 import com.example.UniTimeTableManagemend.respositories.CourseRepository;
+import com.example.UniTimeTableManagemend.services.Impl.CourseServiceImp;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,8 +19,7 @@ import java.util.Optional;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
@@ -27,12 +28,13 @@ class CourseServiceTest {
     @Mock
     private CourseRepository courseRepository;
 
-    private CourseService courseService;
+    @InjectMocks
+    private CourseServiceImp courseService;
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        courseService = new CourseService(courseRepository);
+        courseService = new CourseServiceImp(courseRepository);
     }
 
     @Test
@@ -73,11 +75,43 @@ class CourseServiceTest {
     }
 
     @Test
+    void insertCourse_courseAlreadyExists_exceptionThrown() throws CourseException {
+
+        Course existCourse = new Course("SE2030","DS","what",7,Faculty.ENGINEERING);
+        Course newCourse = new Course("SE2030","DS","what",7,Faculty.ENGINEERING);
+
+        when(courseRepository.findCourseByCode("SE2030")).thenReturn(Optional.of(existCourse));
+
+        // Call the service method and expect CourseException
+        assertThrows(CourseException.class, () -> courseService.insertCourse(newCourse));
+
+        // Verify that insert method is not called
+        verify(courseRepository, never()).insert(newCourse);
+
+
+    }
+
+    @Test
     public void deleteCourse_Success() throws CourseException {
         when(courseRepository.existsById("1")).thenReturn(true);
 
         Boolean actual = courseService.deleteCourse("1");
+
+        // Verify that deleteById method is called with correct argument
+        verify(courseRepository).deleteById("1");
+
         assertTrue(actual);
+    }
+
+    @Test
+    public void deleteCourse_NotExists() throws CourseException {
+        when(courseRepository.existsById("2")).thenReturn(false);
+
+        // Call the service method and expect CourseException
+        assertThrows(CourseException.class, ()-> courseService.deleteCourse("2"));
+
+        // Verify that deleteById method is not called
+        verify(courseRepository, never()).deleteById("2");
     }
 
     @Test
@@ -100,6 +134,28 @@ class CourseServiceTest {
         assertNotNull(updated);
         assertEquals(updated.getName(),updated.getName());
     }
+
+    @Test
+    void updateCourse_CourseIdNotExists_exceptionThrown() {
+        // Mock data
+        String courseId = "123";
+        Course course1 = new Course("CS101", "Introduction to Computer Science", "An introductory course to computer science", 3, null);
+
+        // Stubbing the repository method to return Optional.empty() since course ID does not exist
+        when(courseRepository.findById(courseId)).thenReturn(Optional.empty());
+
+        // Call the service method and expect CourseException
+        assertThrows(CourseException.class, () -> {
+            courseService.updateCourse(courseId, course1);
+        });
+
+        // Verify that findById method is called with the correct argument
+        verify(courseRepository).findById(courseId);
+
+        // Verify that save method is not called
+        verify(courseRepository, never()).save(any());
+    }
+
 
     @Test
     void updateCourseFaculty_courseExists_facultyUpdated() throws CourseException, ConstraintViolationException {
