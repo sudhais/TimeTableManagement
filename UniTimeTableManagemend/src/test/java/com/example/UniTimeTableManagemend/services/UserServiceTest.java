@@ -4,14 +4,11 @@ import com.example.UniTimeTableManagemend.dto.AuthenticationResponse;
 import com.example.UniTimeTableManagemend.dto.RegisterRequest;
 import com.example.UniTimeTableManagemend.exception.CourseException;
 import com.example.UniTimeTableManagemend.exception.UserException;
-import com.example.UniTimeTableManagemend.models.Course;
 import com.example.UniTimeTableManagemend.models.User;
-import com.example.UniTimeTableManagemend.models.enums.Faculty;
 import com.example.UniTimeTableManagemend.models.enums.Role;
-import com.example.UniTimeTableManagemend.respositories.CourseRepository;
-import com.example.UniTimeTableManagemend.respositories.TimeTableRepository;
 import com.example.UniTimeTableManagemend.respositories.UserRepository;
 import com.example.UniTimeTableManagemend.services.Impl.CourseServiceImp;
+import com.example.UniTimeTableManagemend.services.Impl.JwtServiceImpl;
 import com.example.UniTimeTableManagemend.services.Impl.TimeTableServiceImp;
 import com.example.UniTimeTableManagemend.services.Impl.UserServiceImp;
 import jakarta.validation.ConstraintViolationException;
@@ -41,7 +38,7 @@ class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
-    private JwtService jwtService;
+    private JwtServiceImpl jwtService;
 
     @InjectMocks
     private UserServiceImp userService;
@@ -109,19 +106,19 @@ class UserServiceTest {
 
         AuthenticationResponse expectedResponse = AuthenticationResponse.builder()
                 .token("jwtToken")
-                .user(User.builder()
-                        .firstName("John")
-                        .lastName("Doe")
-                        .email("john@example.com")
-                        .password("encodedPassword")
-                        .role(Role.STUDENT)
-                        .build())
+//                .user(User.builder()
+//                        .firstName("John")
+//                        .lastName("Doe")
+//                        .email("john@example.com")
+//                        .password("encodedPassword")
+//                        .role(Role.STUDENT)
+//                        .build())
                 .build();
 
         AuthenticationResponse actualResponse = userService.addNewUser(request);
 
         assertEquals(expectedResponse.getToken(), actualResponse.getToken());
-        assertEquals(expectedResponse.getUser().getEmail(), actualResponse.getUser().getEmail());
+//        assertEquals(expectedResponse.getUser().getEmail(), actualResponse.getUser().getEmail());
 
         verify(userRepository, times(1)).insert(any(User.class));
     }

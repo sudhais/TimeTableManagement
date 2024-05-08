@@ -1,6 +1,6 @@
 package com.example.UniTimeTableManagemend.cofig;
 
-import com.example.UniTimeTableManagemend.services.JwtService;
+import com.example.UniTimeTableManagemend.services.Impl.JwtServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtService;
 
     private final UserDetailsService userDetailsService;
 

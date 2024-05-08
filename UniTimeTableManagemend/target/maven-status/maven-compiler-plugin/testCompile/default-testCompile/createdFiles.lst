@@ -1,1 +1,7 @@
+com\example\UniTimeTableManagemend\services\RoomServiceTest.class
 com\example\UniTimeTableManagemend\UniTimeTableManagemendApplicationTests.class
+com\example\UniTimeTableManagemend\UniTimeTableManagemendApplicationTests$Calculator.class
+com\example\UniTimeTableManagemend\services\CourseServiceTest.class
+com\example\UniTimeTableManagemend\services\TimeTableServiceTest.class
+com\example\UniTimeTableManagemend\services\UserServiceTest.class
+com\example\UniTimeTableManagemend\services\NotificationServiceTest.class

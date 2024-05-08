@@ -11,7 +11,6 @@ import com.example.UniTimeTableManagemend.models.User;
 import com.example.UniTimeTableManagemend.models.enums.Role;
 import com.example.UniTimeTableManagemend.respositories.UserRepository;
 import com.example.UniTimeTableManagemend.services.CourseService;
-import com.example.UniTimeTableManagemend.services.JwtService;
 import com.example.UniTimeTableManagemend.services.TimeTableService;
 import com.example.UniTimeTableManagemend.services.UserService;
 import jakarta.validation.ConstraintViolationException;
@@ -31,7 +30,7 @@ public class UserServiceImp implements UserService {
     private final CourseService courseService;
     private final TimeTableService timeTableService;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtService;
     public List<User> getAllUsers() {
         //get all user in db
         List<User> users = userRepository.findAll();
@@ -68,7 +67,7 @@ public class UserServiceImp implements UserService {
 
             return AuthenticationResponse.builder()
                     .token(jwtToken)
-                    .user(user)
+//                    .user(user)
                     .build();
         }
     }
